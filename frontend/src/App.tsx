@@ -1,21 +1,12 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import 	ProductList from './components/ProductList';
-import AddProduct from './components/AddProduct';
-import EditProduct from './components/EditProduct';
 
 function App() {
-	return (
-		<div className='container'>
-			<BrowserRouter>
-				<Routes>
-					<Route path='/' element={<ProductList />} />
-					<Route path='/create' element={<AddProduct />} />
-					<Route path='/edit/:id' element={<EditProduct />} />
-					<Route path='*' element={<h1>404 Not Found</h1>} />
-				</Routes>
-			</BrowserRouter>
-		</div>
-	);
+  // const [count, setCount] = useState(0)
+
+  return (
+    <div>
+      <h1 className='text-3xl font-bold'>Test</h1>
+    </div>
+  );
 }
 
-export default App;
+export default App
