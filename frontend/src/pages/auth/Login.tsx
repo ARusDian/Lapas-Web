@@ -30,7 +30,7 @@ const Login = () => {
           <label htmlFor="password">Password*</label>
             <TextField required id="password" type='password' variant="outlined" size='medium'  value={form.password} onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))} />
           </div>
-          <Button type='submit' variant='contained' size='large' endIcon={<LoginIcon />}>Login</Button>
+          <Button type='submit' variant='contained' size='large' color='primary' endIcon={<LoginIcon />}>Login</Button>
         </form>
       </div>
     </div>
