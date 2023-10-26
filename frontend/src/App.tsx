@@ -9,28 +9,28 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/dashboard',
+    path: "/dashboard",
     element: <DashboardLayout />,
     children: [
       {
         index: true,
-        element: <h1>Dashboard</h1>
+        element: <h1>Dashboard</h1>,
       },
       {
-        path: 'users',
+        path: "users",
         children: [
           {
             index: true,
-            element: <h1>Users</h1>
+            element: <h1>Users</h1>,
           },
           {
-            path: 'create',
-            element: <UserCreate />
-          }
-        ]
-      }
-    ]
-  }
+            path: "create",
+            element: <UserCreate />,
+          },
+        ],
+      },
+    ],
+  },
 ]);
 
 function App() {
@@ -41,4 +41,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
