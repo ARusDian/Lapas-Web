@@ -4,3 +4,4 @@
 /requests
 /services
 /prisma/migrations
+.pnpm-lock.yaml
