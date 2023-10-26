@@ -3,4 +3,12 @@ interface LoginProps {
   password: string
 };
 
-export type { LoginProps };
+interface RegisterProps {
+  name: string,
+  roles: string[],
+  email: string,
+  password: string,
+  confirm_password: string
+};
+
+export type { LoginProps, RegisterProps };

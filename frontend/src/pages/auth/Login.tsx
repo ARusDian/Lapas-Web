@@ -24,7 +24,7 @@ const Login = () => {
         <form onSubmit={handleSubmit}  className='flex flex-col h-full gap-4 mt-4'>
           <div className='flex flex-col gap-1'>
             <label htmlFor="email">Email*</label>
-            <TextField required id="email" variant="outlined" size='medium'  value={form.email} onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))} />
+            <TextField required id="email" type='email' variant="outlined" size='medium'  value={form.email} onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))} />
           </div>
           <div className='flex flex-col gap-1'>
           <label htmlFor="password">Password*</label>
