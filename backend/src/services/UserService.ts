@@ -58,18 +58,18 @@ export const getUserByEmailService = async (email: string) => {
 export const createUserService = async (req: Request) => {
 	const { name, email, password, roleId } = await UserInputValidation(req.body, "createUser");
 	
-	return await prisma.user.create({
-		data: {
-			name: name,
-			email: email,
-			password: password,
-			role: {
-				connect: {
-					id: roleId || 2
-				}
-			}
-		}
-	});
+	// return await prisma.user.create({
+	// 	data: {
+	// 		name: name,
+	// 		email: email,
+	// 		password: password,
+	// 		role: {
+	// 			connect: {
+	// 				id: roleId || 2
+	// 			}
+	// 		}
+	// 	}
+	// });
 };
 
 export const updateUserService = async (id: number | string, req: Request) => {
