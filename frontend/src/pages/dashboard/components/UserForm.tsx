@@ -10,18 +10,38 @@ import { RegisterProps } from "../../../types/Auth.type";
 
 interface Props {
   onSubmit: (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => void;
+  data?: RegisterProps;
 }
 
-const UserForm = ({ onSubmit }: Props) => {
-  const [form, setForm] = React.useState<RegisterProps>({
-    name: "",
-    roles: [],
-    email: "",
-    password: "",
-    confirm_password: "",
-  });
+const UserForm = ({ onSubmit, data }: Props) => {
+  const [form, setForm] = React.useState<RegisterProps>(
+    data ?? {
+      name: "",
+      email: "",
+      NIP: "",
+      gender: "L",
+      jabatan: "",
+      roles: [],
+      password: "",
+      confirm_password: "",
+    }
+  );
 
-  const selectHandler = (event: SelectChangeEvent<string | string[]>) => {
+  const jabatanSelectHandler = (event: SelectChangeEvent) => {
+    setForm((prev) => ({
+      ...prev,
+      jabatan: event.target.value as "L" | "P",
+    }));
+  };
+
+  const genderSelectHandler = (event: SelectChangeEvent) => {
+    setForm((prev) => ({
+      ...prev,
+      gender: event.target.value as "L" | "P",
+    }));
+  };
+
+  const roleSelectHandler = (event: SelectChangeEvent<string | string[]>) => {
     const {
       target: { value },
     } = event;
@@ -65,21 +85,68 @@ const UserForm = ({ onSubmit }: Props) => {
           />
         </div>
       </div>
-      <div className="flex flex-col w-full gap-1">
-        <label>Roles*</label>
-        <Select
-          required
-          multiple
-          value={form.roles}
-          size="small"
-          onChange={selectHandler}
-        >
-          {["super-admin", "admin", "petugas"].map((role) => (
-            <MenuItem key={role} value={role}>
-              {role}
-            </MenuItem>
-          ))}
-        </Select>
+      <div className="flex flex-row gap-4">
+        <div className="flex flex-col w-full gap-1">
+          <label htmlFor="NIP">NIP*</label>
+          <TextField
+            required
+            type="text"
+            name="NIP"
+            id="NIP"
+            variant="outlined"
+            size="small"
+            value={form.NIP}
+            onChange={formSetHandler}
+          />
+        </div>
+        <div className="flex flex-col w-full gap-1">
+          <label>Gender*</label>
+          <Select
+            required
+            value={form.gender}
+            size="small"
+            onChange={genderSelectHandler}
+          >
+            {["L", "P"].map((gender) => (
+              <MenuItem key={gender} value={gender}>
+                {gender}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+      </div>
+      <div className="flex flex-row gap-4">
+        <div className="flex flex-col w-full gap-1">
+          <label>Jabatan*</label>
+          <Select
+            required
+            value={form.jabatan}
+            size="small"
+            onChange={jabatanSelectHandler}
+          >
+            {["Petugas", "Penjaga", "Pengunjung"].map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+        <div className="flex flex-col w-full gap-1">
+          <label>Roles*</label>
+          <Select
+            required
+            multiple
+            value={form.roles}
+            size="small"
+            onChange={roleSelectHandler}
+          >
+            {["super-admin", "admin", "petugas"].map((role) => (
+              <MenuItem key={role} value={role}>
+                {role}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
       </div>
       <div className="flex flex-row gap-4">
         <div className="flex flex-col w-full gap-1">
