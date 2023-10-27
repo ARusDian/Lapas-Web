@@ -10,6 +10,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum PushButtonType {
+  KEBAKARAN
+  RUSUH
+  BENCANA
+}
+
+enum Gender {
+  L
+  P
+}
+
 model Role {
   id        Int      @id @default(autoincrement())
   name      String   @unique
@@ -21,14 +32,37 @@ model Role {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  name      String
-  roleId    Int       @map("role_id")
-  role      Role      @relation(fields: [roleId], references: [id])
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
+  id             Int             @id @default(autoincrement())
+  // Firebase
+  uid            String?         @unique
+  email          String          @unique
+  password       String
+  disabled       Boolean         @default(false)
+  // User
+  name           String
+  NIP            String          @unique
+  gender         Gender
+  jabatan        String
+  approved       Boolean         @default(false)
+  // Foreign Key
+  roleId         Int             @map("role_id")
+  // Relations
+  pushButtonLogs PushButtonLog[]
+  role           Role            @relation(fields: [roleId], references: [id])
+  // Timestamp
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+model PushButtonLog {
+  id        Int            @id @default(autoincrement())
+  userId    Int            @map("user_id")
+  user      User           @relation(fields: [userId], references: [id])
+  type      PushButtonType
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+
+  @@map("push_button_logs")
 }
