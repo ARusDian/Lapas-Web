@@ -5,3 +5,4 @@
 /services
 /prisma/migrations
 .pnpm-lock.yaml
+/private
