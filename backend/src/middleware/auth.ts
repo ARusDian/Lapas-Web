@@ -1,7 +1,8 @@
 import { Response, NextFunction } from "express";
-import jwt, { JsonWebTokenError, NotBeforeError, TokenExpiredError } from "jsonwebtoken";
-import { getUserByIdService } from "../services";
-import { AuthToken, ErrorResponse, ErrorDetails, UserAuthInfoRequest } from "../models";
+import { getUserByUidService } from "../services";
+import { ErrorResponse, ErrorDetails, UserAuthInfoRequest } from "../models";
+import { getAuth, } from "firebase-admin/auth";
+import { FirebaseError } from 'firebase-admin';
 
 export const verifyUser = async (req: UserAuthInfoRequest, res: Response, next: NextFunction) => {
 	try {
@@ -19,56 +20,23 @@ export const verifyUser = async (req: UserAuthInfoRequest, res: Response, next: 
 		}
 		const verifyToken = (token: string) => {
 			try {
-				return jwt.verify(token, process.env.JWT_SECRET as string);
-			} catch (error) {
-				if (error instanceof TokenExpiredError) {
-					throw new ErrorResponse(
-						401,
-						"Unauthorized",
-						new ErrorDetails(
-							"VerifyUserError",
-							"Token Error",
-							"Token has expired"
-						)
-					);
-				}
-				if (error instanceof NotBeforeError) {
-					throw new ErrorResponse(
-						401,
-						"Unauthorized",
-						new ErrorDetails(
-							"VerifyUserError",
-							"Token Error",
-							"Token is not valid yet"
-						)
-					);
-				}
-				if (error instanceof JsonWebTokenError) {
-					throw new ErrorResponse(
-						401,
-						"Unauthorized",
-						new ErrorDetails(
-							"VerifyUserError",
-							"Token Error",
-							"Invalid token"
-						)
-					);
-				}
+				return getAuth().verifyIdToken(token);
+			} catch (error: unknown) {
 				throw new ErrorResponse(
 					401,
 					"Unauthorized",
 					new ErrorDetails(
 						"VerifyUserError",
-						"Token Error",
-						"Invalid token"
+						(error as FirebaseError).code || "Token Error",
+						(error as FirebaseError).message || "Invalid token"
 					)
 				);
 			}
 		};
 
-		const decodedToken = verifyToken(token.split(" ")[1]);
+		const decodedToken = await verifyToken(token.split(" ")[1]);
 
-		if (!decodedToken) {
+		if (!decodedToken || !decodedToken.uid) {
 			throw new ErrorResponse(
 				401,
 				"Unauthorized",
@@ -80,7 +48,7 @@ export const verifyUser = async (req: UserAuthInfoRequest, res: Response, next: 
 			);
 		}
 
-		const user = await getUserByIdService((decodedToken as AuthToken).id);
+		const user = await getUserByUidService(decodedToken.uid);
 
 		if (!user) {
 			throw new ErrorResponse(

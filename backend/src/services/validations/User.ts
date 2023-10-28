@@ -1,10 +1,9 @@
 import { BaseUserModel, ErrorDetails, ErrorResponse } from "../../models";
 import { getUserByEmailService } from "../UserService";
-import argon2 from "argon2";
 
-export const UserInputValidation = async (newUser: BaseUserModel, errorName : string) => { 
-	const { name, email, password, roleId } = newUser;
-	if (!name || !email || !password) {
+export const UserInputValidation = async (newUser: BaseUserModel, errorName: string, includePassword: boolean = false) => {
+	const { name, email, password, roleId, NIP, gender, jabatan, approved } = newUser;
+	if (!name || !email || !NIP || !gender || !jabatan || !password) {
 		throw new ErrorResponse(
 			400,
 			"Bad Request",
@@ -15,6 +14,7 @@ export const UserInputValidation = async (newUser: BaseUserModel, errorName : st
 			)
 		);
 	}
+
 	if (!email.includes("@")) {
 		throw new ErrorResponse(
 			400,
@@ -26,6 +26,30 @@ export const UserInputValidation = async (newUser: BaseUserModel, errorName : st
 			)
 		);
 	}
+	if (gender != "L" && gender != "P") {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				errorName,
+				"Validation Error",
+				"Invalid Gender: L or P"
+			)
+		);
+	}
+
+	if (password.length < 8) {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				errorName,
+				"Validation Error",
+				"Password must be at least 8 characters"
+			)
+		);
+	}
+
 	const user = await getUserByEmailService(email);
 	if (user) {
 		throw new ErrorResponse(
@@ -38,11 +62,15 @@ export const UserInputValidation = async (newUser: BaseUserModel, errorName : st
 			)
 		);
 	}
-	const hashedPassword = await argon2.hash(password);
 	return {
 		name: name,
 		email: email,
-		password: hashedPassword,
+		password: password,
+		NIP: NIP,
+		gender: gender,
+		jabatan: jabatan,
+		approved: approved,
 		roleId: roleId
+
 	};
 };

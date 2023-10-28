@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import {
-	loginService,
 	registerService,
 	authenticatedService
 } from "../services";
@@ -20,32 +19,13 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 		const response = new SuccessResponse<AuthData>(
 			200,
 			"OK",
-			new DataDetailResponse<AuthData>(
+			new DataDetailResponse<any>(
 				"register",
 				authToken
 			)
 		);
 		res.status(response.code).json(response);
 		return;	}
-	catch (error) {
-		next(error);
-	}
-};
-
-export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-	try {
-		const authToken = await loginService(req); 
-		const response = new SuccessResponse<AuthData>(
-			200,
-			"OK",
-			new DataDetailResponse<AuthData>(
-				"login",
-				authToken
-			)
-		);
-		res.status(response.code).json(response);
-		return;
-	}
 	catch (error) {
 		next(error);
 	}
