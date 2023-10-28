@@ -21,6 +21,10 @@ app.get("/api", async (req, res) => {
     res.send("Success connect with Server!");
 });
 
+app.get("/api", async (req, res) => {
+    res.send("Success connect with Server!");
+});
+
 app.use("/api/auth", AuthRouter);
 
 app.use(verifyUser);

@@ -1,21 +1,44 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import 	ProductList from './components/ProductList';
-import AddProduct from './components/AddProduct';
-import EditProduct from './components/EditProduct';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Login from "./pages/auth/Login";
+import DashboardLayout from "./layouts/DashboardLayout";
+import UserCreate from "./pages/dashboard/users/UserCreate";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Login />,
+  },
+  {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <h1>Dashboard</h1>,
+      },
+      {
+        path: "users",
+        children: [
+          {
+            index: true,
+            element: <h1>Users</h1>,
+          },
+          {
+            path: "create",
+            element: <UserCreate />,
+          },
+        ],
+      },
+    ],
+  },
+]);
 
 function App() {
-	return (
-		<div className='container'>
-			<BrowserRouter>
-				<Routes>
-					<Route path='/' element={<ProductList />} />
-					<Route path='/create' element={<AddProduct />} />
-					<Route path='/edit/:id' element={<EditProduct />} />
-					<Route path='*' element={<h1>404 Not Found</h1>} />
-				</Routes>
-			</BrowserRouter>
-		</div>
-	);
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  );
 }
 
 export default App;
