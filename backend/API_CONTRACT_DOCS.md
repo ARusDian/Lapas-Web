@@ -1,3 +1,36 @@
+# API Contract Documentation
+---------------
+
+## Error Object
+```json
+{
+    "code": integer,
+    "status": string,
+    "error" : {
+        "name": string,
+        "details": string,
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+## example :
+```json
+{
+    "code": 400,
+    "status": "Bad Request",
+    "error" : {
+        "name": "ValidationError",
+        "details": "email is required",
+    },
+    "meta": {
+        "timestamp": "2020-12-12T12:12:12.000Z"
+    }
+}
+```
+---------------
+
 # Auth
 
 ## **POST** /api/auth/register
@@ -16,7 +49,9 @@ Registers a new user
     }
     ```
 -   **Headers**
+
     Content-Type: application/json
+
 -   **Success Response:**
 -   **Code:** 201  
     **Content:**
@@ -47,8 +82,10 @@ Returns an authenticated user data
 -   **Data Params**
     None
 -   **Headers**
+
     Content-Type: application/json
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -112,9 +149,11 @@ Returns all users in the database
     -   `disabled=[boolean]`
 -   **Data Params**  
     None
--   **Headers**  
+-   **Headers**
+
     Content-Type: application/json  
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -145,9 +184,11 @@ Returns a user with the specified id
     Required: id = [integer]
 -   **Data Params**
     None
--   **Headers**  
+-   **Headers**
+
     Content-Type: application/json  
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -185,9 +226,11 @@ Creates a new user
         "roleId": integer // Foreign Key
     }
     ```
--   **Headers**  
+-   **Headers**
+
     Content-Type: application/json  
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 201  
     **Content:**
@@ -215,8 +258,10 @@ Approves a user with the specified id
 -   **Data Params**
     None
 -   **Headers**
+
     Content-Type: application/json  
-     authorization: bearer [token]
+    authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 201  
     **Content:**
@@ -255,8 +300,10 @@ Updates a user with the specified id
     }
     ```
 -   **Headers**
+
     Content-Type: application/json  
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -284,8 +331,10 @@ Updates an approved user with the specified id
 -   **Data Params**
     None
 -   **Headers**
+
     Content-Type: application/json  
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -313,8 +362,10 @@ Disables/Enables a user with the specified id
 -   **Data Params**
     None
 -   **Headers**
+
     Content-Type: application/json  
-     authorization: bearer [token]
+    authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -342,8 +393,10 @@ Deletes a user with the specified id
 -   **Data Params**
     None
 -   **Headers**
+
     Content-Type: application/json
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -371,8 +424,10 @@ Deletes a approved user with the specified id
 -   **Data Params**
     None
 -   **Headers**
+
     Content-Type: application/json  
     authorization: bearer [token]
+
 -   **Success Response:**
 -   **Code:** 200  
     **Content:**
@@ -387,6 +442,221 @@ Deletes a approved user with the specified id
     },
     "meta" : {
         "timestamp" : datetime,
+    }
+}
+```
+
+# Role
+
+-   Role Object
+
+```json
+{
+    "id": integer,
+    "name": string,
+    "createdAt": string, // Hidden
+    "updatedAt": string // Hidden
+}
+```
+
+## **GET** /api/roles
+
+Returns all roles in the database
+
+-   **URL Params**  
+    None
+-   **Data Params**
+    None
+-   **Headers**
+
+    Content-Type: application/json  
+    authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 200  
+    **Content:**
+
+```json
+{
+    "code": 200,
+    "status": "OK",
+    "data": {
+        "name": "roles",
+        "data": {
+            {<role_object>},
+            {<role_object>},
+            {<role_object>}
+        }
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+
+## **GET** /api/roles/:id
+
+Returns a role with the specified id
+
+-   **URL Params**  
+    Required: id = [integer]
+-   **Data Params**
+    None
+-   **Headers**
+
+    Content-Type: application/json  
+    authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 200  
+    **Content:**
+
+```json
+{
+    "code": 200,
+    "status": "OK",
+    "data": {
+        "name": "role",
+        "data": {<role_object>}
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+
+## **GET** /api/roles/:id/users
+
+Returns a role with the specified id
+
+-   **URL Params**  
+    Required: id = [integer]
+-   **Data Params**
+    None
+-   **Headers**
+
+    Content-Type: application/json  
+    authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 200  
+    **Content:**
+
+```json
+{
+    "code": 200,
+    "status": "OK",
+    "data": {
+        "name": "role",
+        "data": {
+
+        }
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+
+## **POST** /api/roles
+
+Creates a new role
+
+-   **URL Params**  
+    None
+-   **Data Params**
+    ```json
+    {
+        "name": string
+    }
+    ```
+-   **Headers**
+
+    Content-Type: application/json  
+     authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 201  
+    **Content:**
+
+```json
+{
+    "code": 201,
+    "status": "Created",
+    "data": {
+        "name": "role",
+        "data": {<role_object>}
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+
+## **PUT** /api/roles/:id
+
+Updates a role with the specified id
+
+-   **URL Params**  
+    Required: id = [integer]
+-   **Data Params**
+    ```json
+    {
+        "name": string
+    }
+    ```
+-   **Headers**
+
+    Content-Type: application/json  
+    authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 201  
+    **Content:**
+
+```json
+{
+    "code": 201,
+    "status": "Created",
+    "data": {
+        "name": "role",
+        "data": {<role_object>}
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+
+## **DELETE** /api/roles/:id
+
+Deletes a role with the specified id
+
+-   **URL Params**  
+    Required: id = [integer]
+
+-   **Data Params**
+    None
+
+-   **Headers**
+
+    Content-Type: application/json  
+    authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 201  
+    **Content:**
+
+```json
+{
+    "code": 201,
+    "status": "Created",
+    "data": {
+        "name": "role",
+        "data": {<role_object>}
+    },
+    "meta": {
+        "timestamp": datetime
     }
 }
 ```
