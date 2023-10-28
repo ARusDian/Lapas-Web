@@ -15,6 +15,7 @@ export const getUsersService = async (req: Request) => {
 			name: req.query.name ? req.query.name.toString() : undefined,
 			email: req.query.email ? req.query.email.toString() : undefined,
 			NIP: req.query.NIP ? req.query.NIP.toString() : undefined,
+			gender: req.query.gender ? req.query.gender.toString() as "L" | "P" : undefined,
 			jabatan: req.query.jabatan ? req.query.jabatan.toString() : undefined,
 			approved: req.query.approved ? (req.query.approved === 'true') : undefined,
 			disabled: req.query.disabled ? (req.query.disabled === 'true') : undefined,
@@ -25,6 +26,7 @@ export const getUsersService = async (req: Request) => {
 			name: true,
 			email: true,
 			NIP: true,
+			gender: true,
 			jabatan: true,
 			approved: true,
 			disabled: true,
@@ -204,6 +206,55 @@ export const createRegistrationUserService = async (req: Request) => {
 };
 
 export const updateUserService = async (id: number | string, req: Request) => {
+	const user = await getUserByIdService(id);
+
+	if (!user.uid) {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				"updateUser",
+				"Update Error",
+				"User not approved yet, please contact admin"
+			)
+		);
+	}
+
+	const {
+		email,
+		name,
+		NIP,
+		gender,
+		jabatan,
+		password,
+		approved,
+		roleId
+	} = await UserInputValidation(req.body, "updateUser");
+
+	return await prisma.user.update({
+		where: {
+			id: user.id
+		},
+		data: {
+			name: name,
+			email: email,
+			password: password,
+			uid: user.uid,
+			disabled: user.disabled,
+			NIP: NIP,
+			gender: gender,
+			jabatan: jabatan,
+			approved: approved,
+			role: {
+				connect: {
+					id: roleId || 2
+				}
+			}
+		}
+	});
+};
+
+export const updateApprovedUserService = async (id: number | string, req: Request) => {
 	const user = await getUserByIdService(id);
 
 	if (!user.uid) {
