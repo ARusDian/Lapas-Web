@@ -1,12 +1,16 @@
 import express from "express";
-import { createUser, deleteUser, getUser, getUsers, updateUser } from "../controllers";
+import { approveUser, createUser, deleteApprovedUser, deleteUser, getUser, getUsers, setDisableUser, updateUser } from "../controllers";
 
 const userRouter = express.Router();
 
 userRouter.get("/", getUsers);
 userRouter.get("/:id", getUser);
-userRouter.put("/:id", updateUser);
 userRouter.post("/", createUser);
+userRouter.post("/:id/approve", approveUser);
+userRouter.put("/:id", updateUser);
+userRouter.put("/:id/disable", setDisableUser);
 userRouter.delete("/:id", deleteUser);
+userRouter.delete("/:id/approve", deleteApprovedUser);
+
 
 export { userRouter };

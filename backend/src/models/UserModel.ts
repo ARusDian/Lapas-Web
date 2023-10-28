@@ -1,14 +1,33 @@
-import { BaseRoleModel, OrderModel, ProductModel } from ".";
+import { PushButtonLogModel } from './PushButtonLogModel';
+import { UserRecord } from "firebase-admin/auth";
+import { BaseRoleModel } from ".";
 
-export interface BaseUserModel {
+type CustomUserRecord = Omit<UserRecord, "metadata" | "providerData" | "toJSON" | "emailVerified" | "uid">;
+
+export interface BaseUserModel extends CustomUserRecord {
     id?: number;
-    name: string;
+
+    // Firebase Auth
+    uid : string | null;
     email: string;
     password?: string;
+    disabled: boolean;
+
+    // User
+    name: string;
+    NIP: string;
+    gender: "L" | "P";
+    jabatan: string;
+    approved : boolean;
+    
+    
     role?: BaseRoleModel;
     roleId?: number;
-    orders?: OrderModel[];
-    products? : ProductModel[];
+
+    pushButtonLog?: PushButtonLogModel[];
+    
+    created_at?: String;
+    updated_at?: String;
 
 }
 
