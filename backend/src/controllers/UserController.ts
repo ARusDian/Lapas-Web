@@ -5,19 +5,21 @@ import {
 	deleteUserService,
 	createUserService,
 	updateUserService,
-	getUserByIdWithOrderService
+	deleteApprovedUserService,
+	setDisableUserService,
+	approveUserService,
 } from "../services";
 import { Request, Response, NextFunction } from "express";
 
 export const getUsers = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const users = await getUsersService();
+		const users = await getUsersService(req);
 		const response = new SuccessResponse<UserModel[]>(
 			200,
 			"OK",
 			new DataDetailResponse<UserModel[]>(
 				"users",
-				users
+				users as UserModel[]
 			)
 		);
 		res.status(response.code).json(response);
@@ -28,24 +30,6 @@ export const getUsers = async (req: Request, res: Response, next: NextFunction) 
 	}
 };
 
-export const getUserByIdWithOrder = async (req: Request, res: Response, next: NextFunction) => {
-	try {
-		const user = await getUserByIdWithOrderService(req.params.id);
-		const response = new SuccessResponse<UserModel>(
-			200,
-			"OK",
-			new DataDetailResponse<UserModel>(
-				"users",
-				user
-			)
-		);
-		res.status(response.code).json(response);
-		return;
-	}
-	catch (error) {
-		next(error);
-	}
-};
 
 export const createUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -55,7 +39,7 @@ export const createUser = async (req: Request, res: Response, next: NextFunction
 			"Created",
 			new DataDetailResponse<UserModel>(
 				"users",
-				user
+				user as unknown as UserModel
 			)
 		);
 		res.status(response.code).json(response);
@@ -87,7 +71,7 @@ export const getUser = async (req: Request, res: Response, next: NextFunction) =
 
 export const updateUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const updatedUser = await updateUserService(Number(req.params.id), req);
+		const updatedUser = await updateUserService(Number(req.params.id), req) as UserModel;
 		const response = new SuccessResponse<UserModel>(
 			200,
 			"OK",
@@ -106,7 +90,7 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 
 export const deleteUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const user = await deleteUserService(Number(req.params.id));
+		const user = await deleteUserService(Number(req.params.id)) as UserModel;
 		const response = new SuccessResponse<UserModel>(
 			200,
 			"OK",
@@ -123,3 +107,57 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 	}
 };
 
+export const approveUser = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const user = await approveUserService(Number(req.params.id)) as UserModel;
+		const response = new SuccessResponse<UserModel>(
+			200,
+			"OK",
+			new DataDetailResponse<UserModel>(
+				"users",
+				user
+			)
+		);
+		res.status(response.code).json(response);
+		return;
+	}
+	catch (error) {
+		next(error);
+	}
+}
+
+export const deleteApprovedUser = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const user = await deleteApprovedUserService(Number(req.params.id)) as UserModel;
+		const response = new SuccessResponse<UserModel>(
+			200,
+			"OK",
+			new DataDetailResponse<UserModel>(
+				"users",
+				user
+			)
+		);
+		res.status(response.code).json(response);
+		return;
+	}
+	catch (error) {
+		next(error);
+	}
+}
+
+export const setDisableUser = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const user = await setDisableUserService(req.params.id);
+		const response = new SuccessResponse<UserModel>(
+			200,
+			"OK",
+			new DataDetailResponse<UserModel>(
+				"users",
+				user
+			)
+		);
+		return res.status(response.code).json(response);
+	} catch (error) {
+		next(error);
+	}
+}

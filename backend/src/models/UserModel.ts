@@ -2,11 +2,13 @@ import { PushButtonLogModel } from './PushButtonLogModel';
 import { UserRecord } from "firebase-admin/auth";
 import { BaseRoleModel } from ".";
 
-export interface BaseUserModel extends UserRecord {
+type CustomUserRecord = Omit<UserRecord, "metadata" | "providerData" | "toJSON" | "emailVerified" | "uid">;
+
+export interface BaseUserModel extends CustomUserRecord {
     id?: number;
 
     // Firebase Auth
-    uid : string;
+    uid : string | null;
     email: string;
     password?: string;
     disabled: boolean;
