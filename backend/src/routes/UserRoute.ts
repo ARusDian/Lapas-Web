@@ -1,5 +1,5 @@
 import express from "express";
-import { approveUser, createUser, deleteApprovedUser, deleteUser, getUser, getUsers, setDisableUser, updateUser } from "../controllers";
+import { approveUser, createUser, deleteApprovedUser, deleteUser, getUser, getUsers, setDisableUser, updateApprovedUser, updateUser } from "../controllers";
 
 const userRouter = express.Router();
 
@@ -8,6 +8,7 @@ userRouter.get("/:id", getUser);
 userRouter.post("/", createUser);
 userRouter.post("/:id/approve", approveUser);
 userRouter.put("/:id", updateUser);
+userRouter.put("/:id/approve", updateApprovedUser);
 userRouter.put("/:id/disable", setDisableUser);
 userRouter.delete("/:id", deleteUser);
 userRouter.delete("/:id/approve", deleteApprovedUser);
