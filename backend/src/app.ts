@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// app.use(requestLogger);
+app.use(requestLogger);
 
 app.get("/api", async (req, res) => {
     res.send("Success connect with Server!");
@@ -23,10 +23,10 @@ app.get("/api", async (req, res) => {
 
 app.use("/api/auth", AuthRouter);
 
-app.use("/api/users", userRouter);
 app.use(verifyUser);
 
 app.use(adminOnly);
+app.use("/api/users", userRouter);
 app.use("/api/roles", roleRouter);
 
 app.use(unknownEndpoint);
