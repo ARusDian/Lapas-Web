@@ -1,3 +1,6 @@
+# API Contract Documentation
+---------------
+
 ## Error Object
 ```json
 {
