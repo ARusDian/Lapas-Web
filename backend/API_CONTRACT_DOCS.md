@@ -1,3 +1,33 @@
+## Error Object
+```json
+{
+    "code": integer,
+    "status": string,
+    "error" : {
+        "name": string,
+        "details": string,
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+## example :
+```json
+{
+    "code": 400,
+    "status": "Bad Request",
+    "error" : {
+        "name": "ValidationError",
+        "details": "email is required",
+    },
+    "meta": {
+        "timestamp": "2020-12-12T12:12:12.000Z"
+    }
+}
+```
+---------------
+
 # Auth
 
 ## **POST** /api/auth/register
