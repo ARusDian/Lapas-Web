@@ -1,7 +1,18 @@
+import { useContext, useEffect } from "react";
 import { RegisterProps } from "../../../types/Auth.type";
 import UserForm from "../components/UserForm";
+import LinkHighlightContext from "../../../contexts/LinkHighlightContext";
 
 const Create = () => {
+  const { setCurrentPath }= useContext(LinkHighlightContext);
+  
+  useEffect(() => {
+    setCurrentPath("create");
+    return () => {
+      setCurrentPath("");
+    };
+  }, [setCurrentPath]);
+
   const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => {
     e.preventDefault();
     alert(data);

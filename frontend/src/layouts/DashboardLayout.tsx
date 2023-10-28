@@ -9,10 +9,12 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddIcon from "@mui/icons-material/Add";
+import LinkHighlightContext from "../contexts/LinkHighlightContext";
+
 
 const DashboardLayout = () => {
-  const [openCollapse, setOpenCollapse] = React.useState<boolean>(true);
-
+  const [openCollapse, setOpenCollapse] = React.useState<boolean>(false);
+  const [currentPath, setCurrentPath] = React.useState<string>("");
   return (
     <div>
       <div className="fixed left-0 top-0 w-60 z-10 bg-primary-main h-[100vh] text-primary-contrast px-2">
@@ -38,19 +40,26 @@ const DashboardLayout = () => {
               linkTo="users"
               startIcon={<VisibilityIcon />}
               text="Daftar Pengguna"
-              className="text-sm"
+              className={`${
+                currentPath === "users" && "bg-white bg-opacity-10"
+              } text-sm mb-1`}
             />
             <SidebarLinkButton
               linkTo="users/create"
               startIcon={<AddIcon />}
               text="Tambah Pengguna"
-              className="text-sm"
+              className={`${
+                currentPath === "create" && "bg-white bg-opacity-10"
+              } text-sm`}
             />
           </Collapse>
           <SidebarLinkButton
-            linkTo="/dashboard"
+            linkTo="logs"
             startIcon={<ArticleIcon />}
             text="Logs"
+            className={`${
+              currentPath === "logs" && "bg-white bg-opacity-10"
+            }`}
           />
         </div>
       </div>
@@ -66,9 +75,11 @@ const DashboardLayout = () => {
           </Button>
         </Link>
       </div>
-      <div className="ml-60 mt-16 p-2">
-        <Outlet />
-      </div>
+      <LinkHighlightContext.Provider value={{currentPath, setCurrentPath}}>
+        <div className="ml-60 mt-16 p-2">
+          <Outlet />
+        </div>
+      </LinkHighlightContext.Provider>
     </div>
   );
 };

@@ -2,6 +2,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/auth/Login";
 import DashboardLayout from "./layouts/DashboardLayout";
 import UserCreate from "./pages/dashboard/users/UserCreate";
+import UserList from "./pages/dashboard/users/UserList";
+import LogIndex from "./pages/dashboard/logs/LogIndex";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +23,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <h1>Users</h1>,
+            element: <UserList />,
           },
           {
             path: "create",
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "logs",
+        element: <LogIndex />,
+      }
     ],
   },
 ]);
