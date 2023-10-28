@@ -4,6 +4,7 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import UserCreate from "./pages/dashboard/users/UserCreate";
 import UserList from "./pages/dashboard/users/UserList";
 import LogIndex from "./pages/dashboard/logs/LogIndex";
+import DashboardIndex from "./pages/dashboard/DashboardIndex";
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <h1>Dashboard</h1>,
+        element: <DashboardIndex />,
       },
       {
         path: "users",
