@@ -1,47 +1,20 @@
 
 export const UserData = [
 	{
-		name: "superadmin",
-		email: "superadmin@gmail.com",
-		password: "$argon2id$v=19$m=65536,t=3,p=4$3TbrdW/vmcbtLld6g84CiQ$52NgcPPdH4k/h0fepPts1l6wkFL1+1PBpFuv/UQg12o",
-		roleId: 1,
-		role: {
-			connect: {
-				id: 1,
-			}
-		}
-	},
-	{
 		name: "admin",
 		email: "admin@gmail.com",
-		password: "$argon2id$v=19$m=65536,t=3,p=4$3TbrdW/vmcbtLld6g84CiQ$52NgcPPdH4k/h0fepPts1l6wkFL1+1PBpFuv/UQg12o",
-		roleId: 2,
+		password: "h1pZW6EvLWqFgkMw_8mygSQOHfi8gSrDCqmwQjuhHGI2g_E2C5N2tXQ7JjQNM-2qoq_cZ0qrHFwAxVqlrKjYug==",
+		gender: "L",
+		NIP: "123456789",
+		jabatan: "admin",
+		approved: true,
+		disabled : false,
+		roleId: 1,
 		role: {
 			connect: {
 				id: 2,
 			}
 		}
 	},
-	{
-		name: "user 1",
-		email: "user1@gmail.com",
-		password: "$argon2id$v=19$m=65536,t=3,p=4$3TbrdW/vmcbtLld6g84CiQ$52NgcPPdH4k/h0fepPts1l6wkFL1+1PBpFuv/UQg12o",
-		roleId: 3,
-		role: {
-			connect : {
-				id: 3,
-			}
-		}
-	},
-	{
-		name: "User 2",
-		email: "user2@gmail.com",
-		password: "$argon2id$v=19$m=65536,t=3,p=4$3TbrdW/vmcbtLld6g84CiQ$52NgcPPdH4k/h0fepPts1l6wkFL1+1PBpFuv/UQg12o",
-		roleId: 3,
-		role: {
-			connect: {
-				id: 3,
-			}
-		}
-	},
+
 ];        
