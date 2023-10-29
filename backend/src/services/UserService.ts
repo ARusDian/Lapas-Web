@@ -51,6 +51,7 @@ export const getUserByIdService = async (id: number | string): Promise<UserModel
 			jabatan: true,
 			approved: true,
 			disabled: true,
+			roleId: true,
 		},
 	});
 	if (!user) {
