@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import { Button, Collapse, Divider } from "@mui/material";
 import SidebarLinkButton from "../components/SidebarLinkButton";
@@ -13,8 +13,15 @@ import LinkHighlightContext from "../contexts/LinkHighlightContext";
 
 
 const DashboardLayout = () => {
+  const navigate = useNavigate();
   const [openCollapse, setOpenCollapse] = React.useState<boolean>(false);
   const [currentPath, setCurrentPath] = React.useState<string>("");
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/");
+  };
+
   return (
     <div>
       <div className="fixed left-0 top-0 w-60 z-10 bg-primary-main h-[100vh] text-primary-contrast px-2">
@@ -70,6 +77,7 @@ const DashboardLayout = () => {
             sx={{ color: "white" }}
             color="primary"
             endIcon={<LogoutIcon />}
+            onClick={handleLogout}
           >
             Logout
           </Button>

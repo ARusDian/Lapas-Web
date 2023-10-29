@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LoginProps } from "../../types/Auth.type";
 import { Button, TextField } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../lib/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,8 +15,18 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    navigate("/dashboard");
+    login(form).then((res) => {
+      console.log(res)
+      localStorage.setItem("user", JSON.stringify(res.user));
+      navigate('/dashboard')
+    }).catch(err => console.log(err));
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("user")) {
+      navigate("/dashboard");
+    }
+  }, [])
 
   return (
     <>

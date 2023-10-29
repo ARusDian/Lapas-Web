@@ -42,7 +42,9 @@ interface UserModel {
 
 interface Role {
   id: number,
-  name: string
+  name: string,
+  created_at?: string,
+  updated_at?: string
 }
 
 export type { LoginProps, RegisterProps, UserModel, Role };
