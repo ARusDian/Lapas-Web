@@ -208,29 +208,8 @@ export const createRegistrationUserService = async (req: Request) => {
 export const updateUserService = async (id: number | string, req: Request) => {
 	const user = await getUserByIdService(id);
 
-	if (!user.uid) {
-		throw new ErrorResponse(
-			400,
-			"Bad Request",
-			new ErrorDetails(
-				"updateUser",
-				"Update Error",
-				"User not approved yet, please contact admin"
-			)
-		);
-	}
-
-	const {
-		email,
-		name,
-		NIP,
-		gender,
-		jabatan,
-		password,
-		approved,
-		roleId
-	} = await UserInputValidation(req.body, "updateUser");
-
+	const { name, email, password, roleId } = await UserInputValidation(req.body, "updateUser");
+	
 	return await prisma.user.update({
 		where: {
 			id: user.id
@@ -239,12 +218,6 @@ export const updateUserService = async (id: number | string, req: Request) => {
 			name: name,
 			email: email,
 			password: password,
-			uid: user.uid,
-			disabled: user.disabled,
-			NIP: NIP,
-			gender: gender,
-			jabatan: jabatan,
-			approved: approved,
 			role: {
 				connect: {
 					id: roleId || 2
