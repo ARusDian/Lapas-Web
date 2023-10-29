@@ -2,6 +2,7 @@ import { Request } from "express";
 import { createRegistrationUserService, createUserService, getUserByEmailService, getUserByIdService, getUserByUidService } from ".";
 import { ErrorDetails, ErrorResponse } from "../models";
 import { getAuth } from "firebase-admin/auth";
+import { FirebaseError } from "firebase-admin";
 
 export const registerService = async (req: Request) => {
 	const { name, email, password, confirmPassword } = req.body;
@@ -69,20 +70,25 @@ export const authenticatedService = async (req: Request) => {
 		);
 	}
 
-	const uid = await getAuth().verifyIdToken(token).then((decodedToken) => {
-		const uid = decodedToken.uid;
-		return uid;
-	}).catch((error) => {
-		throw new ErrorResponse(
-			400,
-			"Bad Request",
-			{
-				name: "AuthenticatedError",
-				message: "Validation Error",
-				details: error
-			}
-		);
-	});
+	const verifyToken = (token: string) => {
+		try {
+			return getAuth().verifyIdToken(token);
+		} catch (error: unknown) {
+			throw new ErrorResponse(
+				401,
+				"Unauthorized",
+				new ErrorDetails(
+					"VerifyUserError",
+					(error as FirebaseError).code || "Token Error",
+					(error as FirebaseError).message || "Invalid token"
+				)
+			);
+		}
+	};
+
+	const decodedToken = await verifyToken(token.split(" ")[1]);
+
+	const uid = decodedToken.uid;
 
 	const user = await getUserByUidService(uid);
 	if (!user) {

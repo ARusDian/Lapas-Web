@@ -7,6 +7,9 @@ export const adminOnly = async (req: UserAuthInfoRequest, res: Response, next: N
 	try {
 		const role = await getRole(req);
 
+		console.log(role);
+
+
 		if (role !== 1 && role !== 2) { 
 			throw new ErrorResponse(
 				401,
@@ -42,8 +45,9 @@ const getRole = async (req: UserAuthInfoRequest) => {
 	}
 	if (req.userId) {
 		const user = await getUserByIdService(req.userId);
+		console.log(user);
 		if (user) {
-			return user.role?.id;
+			return user.roleId;
 		}
 	}
 	return undefined;
