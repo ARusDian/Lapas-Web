@@ -38,7 +38,7 @@ const DashboardLayout = () => {
         });
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         localStorage.removeItem("accessToken");
         navigate("/");
       });
@@ -102,6 +102,9 @@ const DashboardLayout = () => {
             Logout
           </Button>
         </Link>
+      </div>
+      <div className="fixed top-0 left-0 h-[calc(100vh-64px)] w-[calc(100%-240px)] ml-60 opacity-10 -z-10 mt-16 flex justify-center items-center">
+        <img src="/assets/lapas-logo.png" alt="" />
       </div>
 
       <AuthContext.Provider value={{ user }}>
