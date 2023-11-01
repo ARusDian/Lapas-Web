@@ -64,7 +64,7 @@ const DashboardLayout = () => {
               </div>
             </div>
           </div>
-          <Collapse in={openCollapse} unmountOnExit className="pl-4">
+          <Collapse in={openCollapse} unmountOnExit className="pl-4 mt-1">
             <SidebarLinkButton
               linkTo="users"
               startIcon={<VisibilityIcon />}

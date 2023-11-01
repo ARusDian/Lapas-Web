@@ -1,5 +1,3 @@
-import { PushButtonLog } from "./log.type";
-
 interface LoginProps {
   email: string,
   password: string
@@ -23,25 +21,17 @@ interface BaseUserModel {
 }
 
 interface UserModel extends BaseUserModel{
-  id?: number,
+  id: number,
   
   //Firebase Auth
   uid: string,
   disabled: boolean,
 
   //User Data
-  NIP?: string,
+  NIP: string,
   gender: "L" | "P",
   jabatan: string,
   approved: boolean,
-
-  roleId?: number,
-  roles?: Role[],
-
-  pushButtonLog?: PushButtonLog[],
-
-  created_at?: string,
-  updated_at?: string
 }
 
 interface Role {

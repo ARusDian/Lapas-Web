@@ -5,6 +5,7 @@ import UserCreate from "./pages/dashboard/users/UserCreate";
 import UserList from "./pages/dashboard/users/UserList";
 import LogIndex from "./pages/dashboard/logs/LogIndex";
 import DashboardIndex from "./pages/dashboard/DashboardIndex";
+import UserEdit from "./pages/dashboard/users/UserEdit";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
             path: "create",
             element: <UserCreate />,
           },
+          {
+            path: ":userId",
+            element: <UserEdit />,
+          }
         ],
       },
       {
