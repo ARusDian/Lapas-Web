@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { RegisterProps } from "../../../types/Auth.type";
 import UserForm from "../components/UserForm";
 import LinkHighlightContext from "../../../contexts/LinkHighlightContext";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import { api } from "../../../lib/api";
 import AuthContext from "../../../contexts/AuthContext";
 
@@ -34,7 +34,7 @@ const Create = () => {
   };
 
   return (
-    <HelmetProvider>
+    <>
       <Helmet>
         <title>Tambah User - LapasPanic</title>
       </Helmet>
@@ -42,7 +42,7 @@ const Create = () => {
         <h1 className="text-2xl font-bold mb-6">Tambah User</h1>
         <UserForm onSubmit={formSubmitHandler} />
       </div>
-    </HelmetProvider>
+    </>
   );
 };
 

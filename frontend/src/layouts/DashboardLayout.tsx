@@ -13,6 +13,7 @@ import LinkHighlightContext from "../contexts/LinkHighlightContext";
 import AuthContext from "../contexts/AuthContext";
 import { BaseUserModel } from "../types/Auth.type";
 import { getAuthData } from "../lib/api";
+import { HelmetProvider } from "react-helmet-async";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ const DashboardLayout = () => {
   }, []);
 
   return (
-    <div>
+    <HelmetProvider>
       <div className="fixed left-0 top-0 w-60 z-10 bg-primary-main h-[100vh] text-primary-contrast px-2">
         <Link to={"/dashboard"} className="text-2xl text-start pl-2 py-4 block">
           LapasPanic
@@ -110,7 +111,7 @@ const DashboardLayout = () => {
           </div>
         </LinkHighlightContext.Provider>
       </AuthContext.Provider>
-    </div>
+    </HelmetProvider>
   );
 };
 

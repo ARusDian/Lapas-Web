@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import LinkHighlightContext from '../../../contexts/LinkHighlightContext';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 
 const LogIndex = () => {
   const { setCurrentPath } = useContext(LinkHighlightContext);
