@@ -89,6 +89,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
             variant="outlined"
             size="small"
             name="email"
+            value={form.email}
             onChange={formSetHandler}
           />
         </div>

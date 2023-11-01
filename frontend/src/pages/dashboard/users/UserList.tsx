@@ -11,14 +11,14 @@ import { api } from "../../../lib/api";
 import { PuffLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 const UserList = () => {
   const { setCurrentPath } = useContext(LinkHighlightContext);
   const [users, setUsers] = React.useState<UserModel[]>([]);
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
 
-  useEffect(() => {
-    setCurrentPath("users");
+  const fetchUsers = () => {
     api
       .get("/users", {
         headers: {
@@ -31,12 +31,17 @@ const UserList = () => {
       .catch((err) => {
         console.log(err);
       });
+    setIsLoading(false);
+  };
 
+  useEffect(() => {
+    setCurrentPath("users");
+    fetchUsers();
     return () => {
       setCurrentPath("");
     };
   }, []);
-  console.log(users);
+
   const dataColumns = useMemo<MRT_ColumnDef<UserModel>[]>(
     () => [
       {
@@ -44,16 +49,8 @@ const UserList = () => {
         header: "Nama",
       },
       {
-        accessorKey: "uid",
-        header: "UID",
-      },
-      {
         accessorKey: "email",
         header: "Email",
-      },
-      {
-        accessorKey: "NIP",
-        header: "NIP",
       },
       {
         accessorKey: "jabatan",
@@ -64,7 +61,17 @@ const UserList = () => {
         accessorKey: "approved",
         header: "Approved",
         size: 50,
-        Cell: ({ cell }) => <>{cell.getValue() ? <p>Ya</p> : <p>Tidak</p>}</>,
+        Cell: ({ row }) => (
+          <Box>{row.original.approved ? "Approved" : "-"}</Box>
+        ),
+      },
+      {
+        accessorKey: "disabled",
+        header: "Disabled",
+        size: 50,
+        Cell: ({ row }) => (
+          <Box>{row.original.disabled ? "Disabled" : "-"}</Box>
+        ),
       },
     ],
     [users]
@@ -87,9 +94,9 @@ const UserList = () => {
     ),
   });
 
-  if (users.length === 0) {
+  if (isLoading) {
     return (
-      <div className="fixed w-full h-[100vh] top-0 left-0 flex justify-center items-center">
+      <div className="fixed top-0 left-0 h-[calc(100vh-64px)] w-[calc(100%-240px)] ml-60 -z-10 mt-16 flex justify-center items-center">
         <PuffLoader color="#1976d2" size={150} />
       </div>
     );

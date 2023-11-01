@@ -32,6 +32,7 @@ interface UserModel extends BaseUserModel{
   gender: "L" | "P",
   jabatan: string,
   approved: boolean,
+  roleId?: number
 }
 
 interface Role {

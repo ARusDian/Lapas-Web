@@ -91,10 +91,12 @@ const DashboardLayout = () => {
         </div>
       </div>
       <div className="fixed top-0 h-16 bg-primary-main w-full flex justify-end items-center text-primary-contrast px-4 gap-4">
-        <div className="flex gap-1 border px-2 py-1 rounded-md justify-center items-center">
-          <PersonIcon />
-          <p>{user.name}</p>
-        </div>
+        {user.name && (
+          <div className="flex gap-1 border px-2 py-1 rounded-md justify-center items-center">
+            <PersonIcon />
+            <p>{user.name}</p>
+          </div>
+        )}
         <Link to={"/"}>
           <Button
             variant="contained"
@@ -108,12 +110,12 @@ const DashboardLayout = () => {
         </Link>
       </div>
       <div className="fixed top-0 left-0 h-[calc(100vh-64px)] w-[calc(100%-240px)] ml-60 opacity-10 -z-10 mt-16 flex justify-center items-center">
-        <img src="/assets/lapas-logo.png" alt="" />
+        <img src="/assets/lapas-logo.png" />
       </div>
 
       <AuthContext.Provider value={{ user }}>
         <LinkHighlightContext.Provider value={{ currentPath, setCurrentPath }}>
-          <div className="ml-60 mt-16 p-2">
+          <div className="ml-60 mt-16 p-4">
             <Outlet />
           </div>
         </LinkHighlightContext.Provider>
