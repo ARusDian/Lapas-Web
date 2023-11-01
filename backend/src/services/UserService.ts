@@ -339,6 +339,7 @@ export const approveUserService = async (id: number | string) => {
 				id: user.id
 			},
 			data: {
+				uid: UserRecord.uid,
 				approved: true,
 				password: UserRecord.passwordHash,
 			}
