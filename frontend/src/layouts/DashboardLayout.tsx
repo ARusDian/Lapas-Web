@@ -13,7 +13,6 @@ import LinkHighlightContext from "../contexts/LinkHighlightContext";
 import AuthContext from "../contexts/AuthContext";
 import { BaseUserModel } from "../types/Auth.type";
 import { getAuthData } from "../lib/api";
-// import jwt from "jsonwebtoken";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 const DashboardIndex = () => {
   return (
-    <div>
+    <HelmetProvider>
       <Helmet> 
         <title>Dashboard - LapasPanic</title>
       </Helmet>
@@ -11,7 +11,7 @@ const DashboardIndex = () => {
       <div className="text-3xl font-bold">
         Welcome back, Admin!
       </div>
-    </div>
+    </HelmetProvider>
   )
 }
 
