@@ -10,22 +10,26 @@ interface RegisterProps {
   NIP?: string,
   gender: "L" | "P",
   jabatan: string,
-  roles: string[],
+  roleId: number,
   email: string,
   password: string,
-  confirm_password: string
+  confirm_password?: string
+  approved: boolean
 };
 
-interface UserModel {
+interface BaseUserModel {
+  name: string,
+  email: string,
+}
+
+interface UserModel extends BaseUserModel{
   id?: number,
   
   //Firebase Auth
   uid: string,
-  email: string,
   disabled: boolean,
 
   //User Data
-  name: string,
   NIP?: string,
   gender: "L" | "P",
   jabatan: string,
@@ -47,4 +51,4 @@ interface Role {
   updated_at?: string
 }
 
-export type { LoginProps, RegisterProps, UserModel, Role };
+export type { LoginProps, RegisterProps, BaseUserModel, UserModel, Role };

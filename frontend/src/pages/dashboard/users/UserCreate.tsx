@@ -1,19 +1,19 @@
-import { useContext, useEffect, useState } from "react";
-import { RegisterProps, Role } from "../../../types/Auth.type";
+import { useContext, useEffect } from "react";
+import { RegisterProps } from "../../../types/Auth.type";
 import UserForm from "../components/UserForm";
 import LinkHighlightContext from "../../../contexts/LinkHighlightContext";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { api } from "../../../lib/api";
+import AuthContext from "../../../contexts/AuthContext";
 
 const Create = () => {
   const { setCurrentPath } = useContext(LinkHighlightContext);
-  // const [roles, setRoles] = useState<Role[]>([]);
+  const { user } = useContext(AuthContext);
+
+  console.log(user);
 
   useEffect(() => {
     setCurrentPath("create");
-
-    // getAllRoles().then((res) => {
-    //   console.log(res);
-    // });
 
     return () => {
       setCurrentPath("");
@@ -25,11 +25,16 @@ const Create = () => {
     data: RegisterProps
   ) => {
     e.preventDefault();
-    alert(data);
+    api.post('/users', data, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    }).then(res => console.log(res))
+    .catch(err => console.log(err));
   };
 
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
         <title>Tambah User - LapasPanic</title>
       </Helmet>
@@ -37,7 +42,7 @@ const Create = () => {
         <h1 className="text-2xl font-bold mb-6">Tambah User</h1>
         <UserForm onSubmit={formSubmitHandler} />
       </div>
-    </>
+    </HelmetProvider>
   );
 };
 

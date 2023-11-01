@@ -15,15 +15,13 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login(form).then((res) => {
-      console.log(res)
-      localStorage.setItem("user", JSON.stringify(res.user));
+    login(form).then(() => {
       navigate('/dashboard')
     }).catch(err => console.log(err));
   };
 
   useEffect(() => {
-    if (localStorage.getItem("user")) {
+    if (localStorage.getItem("accessToken")) {
       navigate("/dashboard");
     }
   }, [])

@@ -35,7 +35,7 @@ const router = createBrowserRouter([
       {
         path: "logs",
         element: <LogIndex />,
-      }
+      },
     ],
   },
 ]);

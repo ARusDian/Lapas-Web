@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import PersonIcon from "@mui/icons-material/Person";
 import { Button, Collapse, Divider } from "@mui/material";
@@ -10,17 +10,39 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import AddIcon from "@mui/icons-material/Add";
 import LinkHighlightContext from "../contexts/LinkHighlightContext";
-
+import AuthContext from "../contexts/AuthContext";
+import { BaseUserModel } from "../types/Auth.type";
+import { getAuthData } from "../lib/api";
+// import jwt from "jsonwebtoken";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
+  const [user, setUser] = React.useState<BaseUserModel>({
+    name: "",
+    email: "",
+  });
   const [openCollapse, setOpenCollapse] = React.useState<boolean>(false);
   const [currentPath, setCurrentPath] = React.useState<string>("");
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
     navigate("/");
   };
+
+  useEffect(() => {
+    getAuthData()
+      .then((res) => {
+        setUser({
+          name: res.data.data.data.name,
+          email: res.data.data.data.email,
+        });
+      })
+      .catch((err) => {
+        console.log(err)
+        localStorage.removeItem("accessToken");
+        navigate("/");
+      });
+  }, []);
 
   return (
     <div>
@@ -64,9 +86,7 @@ const DashboardLayout = () => {
             linkTo="logs"
             startIcon={<ArticleIcon />}
             text="Logs"
-            className={`${
-              currentPath === "logs" && "bg-white bg-opacity-10"
-            }`}
+            className={`${currentPath === "logs" && "bg-white bg-opacity-10"}`}
           />
         </div>
       </div>
@@ -83,11 +103,14 @@ const DashboardLayout = () => {
           </Button>
         </Link>
       </div>
-      <LinkHighlightContext.Provider value={{currentPath, setCurrentPath}}>
-        <div className="ml-60 mt-16 p-2">
-          <Outlet />
-        </div>
-      </LinkHighlightContext.Provider>
+
+      <AuthContext.Provider value={{ user }}>
+        <LinkHighlightContext.Provider value={{ currentPath, setCurrentPath }}>
+          <div className="ml-60 mt-16 p-2">
+            <Outlet />
+          </div>
+        </LinkHighlightContext.Provider>
+      </AuthContext.Provider>
     </div>
   );
 };
