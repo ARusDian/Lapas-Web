@@ -66,3 +66,9 @@ model PushButtonLog {
 
   @@map("push_button_logs")
 }
+
+model DeviceToken {
+  id          Int    @id @default(autoincrement())
+  userId      Int    @map("user_id")
+  deviceToken String @unique @map("device_token")
+}

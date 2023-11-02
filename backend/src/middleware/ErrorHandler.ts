@@ -11,81 +11,81 @@ export const errorHandler = (error: Error | typeof ErrorResponse, request: Reque
 
 	// logger.error("errorHandler: ", error);'
 	// @ts-ignore
-	if (error.errorInfo !== undefined || error instanceof FirebaseAuthError) {
-		// @ts-ignore
-		const firebaseErrorCode = error.errorInfo.code;
-		let errorInfo = {
-			name: "VerifyUserError",
-			message: "Token Error",
-			details: "Invalid token"
-		};
+	// if (error.errorInfo !== undefined || error instanceof FirebaseAuthError) {
+	// 	// @ts-ignore
+	// 	const firebaseErrorCode = error.errorInfo.code;
+	// 	let errorInfo = {
+	// 		name: "VerifyUserError",
+	// 		message: "Token Error",
+	// 		details: "Invalid token"
+	// 	};
 
-		switch (firebaseErrorCode) {
-			case "auth/argument-error":
-				errorInfo = {
-					name: "VerifyUserError",
-					message: "Token Error",
-					details: "Please login to continue"
-				};
-				break;
+	// 	switch (firebaseErrorCode) {
+	// 		case "auth/argument-error":
+	// 			errorInfo = {
+	// 				name: "VerifyUserError",
+	// 				message: "Token Error",
+	// 				details: "Please login to continue"
+	// 			};
+	// 			break;
 
-			case "auth/id-token-expired":
-				errorInfo = {
-					name: "VerifyUserError",
-					message: "Token Error",
-					details: "Token expired"
-				};
-				break;
+	// 		case "auth/id-token-expired":
+	// 			errorInfo = {
+	// 				name: "VerifyUserError",
+	// 				message: "Token Error",
+	// 				details: "Token expired"
+	// 			};
+	// 			break;
 
-			case "auth/id-token-revoked":
-				errorInfo = {
-					name: "VerifyUserError",
-					message: "Token Error",
-					details: "Token revoked"
-				};
-				break;
+	// 		case "auth/id-token-revoked":
+	// 			errorInfo = {
+	// 				name: "VerifyUserError",
+	// 				message: "Token Error",
+	// 				details: "Token revoked"
+	// 			};
+	// 			break;
 
-			case "auth/invalid-argument":
-				errorInfo = {
-					name: "VerifyUserError",
-					message: "Token Error",
-					details: "Invalid token"
-				};
-				break;
+	// 		case "auth/invalid-argument":
+	// 			errorInfo = {
+	// 				name: "VerifyUserError",
+	// 				message: "Token Error",
+	// 				details: "Invalid token"
+	// 			};
+	// 			break;
 
-			case "auth/invalid-claims":
-				errorInfo = {
-					name: "VerifyUserError",
-					message: "Token Error",
-					details: "Invalid token"
-				};
-				break;
+	// 		case "auth/invalid-claims":
+	// 			errorInfo = {
+	// 				name: "VerifyUserError",
+	// 				message: "Token Error",
+	// 				details: "Invalid token"
+	// 			};
+	// 			break;
 
-			case "auth/invalid-creation-time":
-				errorInfo = {
-					name: "VerifyUserError",
-					message: "Token Error",
-					details: "Invalid token"
-				};
-				break;
+	// 		case "auth/invalid-creation-time":
+	// 			errorInfo = {
+	// 				name: "VerifyUserError",
+	// 				message: "Token Error",
+	// 				details: "Invalid token"
+	// 			};
+	// 			break;
 
-			default:
-				errorInfo = {
-					name: "VerifyUserError",
-					message: "Token Error",
-					details: "Invalid token"
-				};
-		}
-		response.status(401).json(
-			new ErrorResponse(
-				401,
-				"Unauthorized",
-				errorInfo
-			)
-		);
-		return;
+	// 		default:
+	// 			errorInfo = {
+	// 				name: "VerifyUserError",
+	// 				message: "Token Error",
+	// 				details: "Invalid token"
+	// 			};
+	// 	}
+	// 	response.status(401).json(
+	// 		new ErrorResponse(
+	// 			401,
+	// 			"Unauthorized",
+	// 			errorInfo
+	// 		)
+	// 	);
+	// 	return;
 
-	}
+	// }
 
 
 

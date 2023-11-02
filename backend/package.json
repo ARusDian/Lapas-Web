@@ -10,6 +10,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "ts-node-dev --respawn --ignore-watch node_modules src/index.ts",
         "start": "ts-node src/index.ts",
+        "seed": "ts-node prisma/seeder/index.ts",
         "build": "tsc",
         "lint": "eslint --ext .ts,.js .",
         "lint-fix": "eslint --ext .ts,.js . --fix"

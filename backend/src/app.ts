@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import { AuthRouter, roleRouter, userRouter } from "./routes";
+import { AuthRouter, notificationRouter, roleRouter, userRouter } from "./routes";
 import { requestLogger, unknownEndpoint, errorHandler, verifyUser, adminOnly } from "./middleware";
 import initializationProviders from "./providers";
 
@@ -20,14 +20,14 @@ app.use(cors({
     "optionsSuccessStatus": 204
 }));
 
-app.use(requestLogger);
+// app.use(requestLogger);
 
 app.get("/api", async (req, res) => {
     res.send("Success connect with Server!");
 });
 
+app.use("/api", notificationRouter);
 app.use("/api/auth", AuthRouter);
-
 app.use(verifyUser);
 
 app.use(adminOnly);
