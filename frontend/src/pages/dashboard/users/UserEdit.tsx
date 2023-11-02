@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { api, getAllRoles } from "../../../lib/api";
+import { api, getAllRoles } from "../../../utils/api";
 import { Role, UserModel } from "../../../types/Auth.type";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import {

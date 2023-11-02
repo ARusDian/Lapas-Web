@@ -3,14 +3,10 @@ import { RegisterProps } from "../../../types/Auth.type";
 import UserForm from "../components/UserForm";
 import LinkHighlightContext from "../../../contexts/LinkHighlightContext";
 import { Helmet } from "react-helmet-async";
-import { api } from "../../../lib/api";
-import AuthContext from "../../../contexts/AuthContext";
+import { api } from "../../../utils/api";
 
 const Create = () => {
   const { setCurrentPath } = useContext(LinkHighlightContext);
-  const { user } = useContext(AuthContext);
-
-  console.log(user);
 
   useEffect(() => {
     setCurrentPath("create");

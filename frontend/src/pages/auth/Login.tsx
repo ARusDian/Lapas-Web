@@ -4,7 +4,7 @@ import { Button, TextField } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../lib/api";
+import { login } from "../../utils/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,12 +12,15 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     login(form).then(() => {
       navigate('/dashboard')
-    }).catch(err => console.log(err));
+    }).catch(err => console.log(err))
+    .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
@@ -78,6 +81,7 @@ const Login = () => {
               size="large"
               color="primary"
               endIcon={<LoginIcon />}
+              disabled={isLoading}
             >
               Login
             </Button>

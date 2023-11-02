@@ -11,6 +11,8 @@ interface Props {
 }
 
 const Navbar = ({ user, handleLogout }: Props) => {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
   return (
     <div className="fixed top-0 h-16 bg-primary-main w-full flex justify-end items-center text-primary-contrast px-4 gap-4">
       {user.name && (
@@ -25,7 +27,11 @@ const Navbar = ({ user, handleLogout }: Props) => {
           sx={{ color: "white" }}
           color="primary"
           endIcon={<LogoutIcon />}
-          onClick={handleLogout}
+          onClick={() => {
+            setIsLoading(true);
+            handleLogout()
+          }}
+          disabled={isLoading}
         >
           Logout
         </Button>

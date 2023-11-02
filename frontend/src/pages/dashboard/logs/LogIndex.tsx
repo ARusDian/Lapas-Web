@@ -17,9 +17,6 @@ const LogIndex = () => {
       <Helmet>
         <title>Logs - LapasPanic</title>
       </Helmet>
-      <div>
-        <p>Lapas</p>
-      </div>
     </>
   )
 }

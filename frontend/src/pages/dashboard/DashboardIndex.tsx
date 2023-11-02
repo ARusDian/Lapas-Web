@@ -5,7 +5,7 @@ import { PuffLoader } from "react-spinners";
 
 const DashboardIndex = () => {
   const { user } = useContext(AuthContext);
-  console.log(user);
+  
   if (!user.name) {
     return (
       <div className="text-3xl font-bold w-full h-[calc(100vh-100px)] flex items-center justify-center">
@@ -20,7 +20,7 @@ const DashboardIndex = () => {
         <title>Dashboard - LapasPanic</title>
       </Helmet>
 
-      <div className="text-3xl font-bold">Welcome back, {user.name}!</div>
+      <div className="text-3xl font-bold">Welcome backdd, {user.name}!</div>
     </>
   );
 };

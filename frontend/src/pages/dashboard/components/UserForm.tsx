@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { RegisterProps, Role } from "../../../types/Auth.type";
-import { getAllRoles } from "../../../lib/api";
+import { getAllRoles } from "../../../utils/api";
 
 interface Props {
   onSubmit: (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => void;
@@ -28,7 +28,6 @@ const UserForm = ({ onSubmit, data }: Props) => {
       approved: true,
     }
   );
-  console.log(form);
   const [roles, setRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

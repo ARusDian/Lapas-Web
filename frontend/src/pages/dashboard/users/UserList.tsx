@@ -7,7 +7,7 @@ import {
   type MRT_ColumnDef,
 } from "material-react-table";
 import { UserModel } from "../../../types/Auth.type";
-import { api } from "../../../lib/api";
+import { api } from "../../../utils/api";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, Button } from "@mui/material";

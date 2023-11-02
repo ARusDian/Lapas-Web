@@ -6,6 +6,7 @@ import UserList from "./pages/dashboard/users/UserList";
 import LogIndex from "./pages/dashboard/logs/LogIndex";
 import DashboardIndex from "./pages/dashboard/DashboardIndex";
 import UserEdit from "./pages/dashboard/users/UserEdit";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "*",
+    element: <NotFound/>,
+  }
 ]);
 
 function App() {
