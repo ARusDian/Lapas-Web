@@ -1,0 +1,124 @@
+{
+  "project_info": {
+    "project_number": "113473407456",
+    "project_id": "panicatlapas",
+    "storage_bucket": "panicatlapas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113473407456:android:a0937db7e54f89b4f7c385",
+        "android_client_info": {
+          "package_name": "com.androiddevs.firebasenotifications"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ0Byy_M1mRhXkbJ4M8VUwmnWkhBbAuEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113473407456:android:bde70427c65dd9def7c385",
+        "android_client_info": {
+          "package_name": "com.bowo.notif_fcm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ0Byy_M1mRhXkbJ4M8VUwmnWkhBbAuEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113473407456:android:11c9a24442ede88bf7c385",
+        "android_client_info": {
+          "package_name": "com.bowo.test_fcm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ0Byy_M1mRhXkbJ4M8VUwmnWkhBbAuEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113473407456:android:115f8bc7acdeb0e3f7c385",
+        "android_client_info": {
+          "package_name": "com.dicoding.myfirebasechat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ0Byy_M1mRhXkbJ4M8VUwmnWkhBbAuEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113473407456:android:7a582fcfb8ec20a0f7c385",
+        "android_client_info": {
+          "package_name": "com.example.robin.notification"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ0Byy_M1mRhXkbJ4M8VUwmnWkhBbAuEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:113473407456:android:337ff6d102727894f7c385",
+        "android_client_info": {
+          "package_name": "com.lapasstalkuda.panicbutton"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ0Byy_M1mRhXkbJ4M8VUwmnWkhBbAuEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

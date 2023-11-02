@@ -7,7 +7,7 @@
     tools:context=".ui.home.HomeFragment">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/lapas_logo"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="24dp"
@@ -16,44 +16,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageView
         android:id="@+id/btn_kebakaran"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="16dp"
-        android:text="Kebakaran"
-        android:backgroundTint="@color/primary_blue"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_kerusuhan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="125dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Kerusuhan"
-        android:backgroundTint="@color/primary_blue"
-        android:textColor="@color/white"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:background="@color/primary_blue"
+        android:src="@drawable/fire_white_small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lapas_logo" />
+
+    <ImageView
+        android:id="@+id/btn_kerusuhan"
+        android:layout_width="match_parent"
+        android:layout_height="125dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:src="@drawable/kerusuhan_white_small"
+        android:background="@color/primary_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_kebakaran" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <ImageView
         android:id="@+id/btn_bencana"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="125dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Bencana"
-        android:backgroundTint="@color/primary_blue"
-        android:textColor="@color/white"
+        android:background="@color/primary_blue"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:src="@drawable/bencana_white_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_kerusuhan" />
