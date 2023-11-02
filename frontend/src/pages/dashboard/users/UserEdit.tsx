@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { api, getAllRoles } from "../../../lib/api";
 import { Role, UserModel } from "../../../types/Auth.type";
 import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -10,6 +10,8 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
+import DashboardLoading from "../components/DashboardLoading";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const UserEdit = () => {
   const { userId } = useParams();
@@ -28,14 +30,10 @@ const UserEdit = () => {
   });
   const [roles, setRoles] = useState<Role[]>([]);
   const navigate = useNavigate();
-  console.log(user)
+
   useEffect(() => {
     api
-      .get(`/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+      .get(`/users/${userId}`)
       .then((res) => {
         setUser(res.data.data.data as UserModel);
       })
@@ -51,15 +49,25 @@ const UserEdit = () => {
 
   const approveUserHandler = () => {
     setIsLoading(true);
-    api.put(`/users/${userId}/approve`).then((res) => {
-      console.log(res)
-      navigate("/dashboard/users");
-    }).catch((err) => console.log(err));
+    api
+      .put(`/users/${userId}/approve`)
+      .then((res) => {
+        console.log(res);
+        navigate("/dashboard/users");
+      })
+      .catch((err) => console.log(err));
     setIsLoading(false);
-  }
+  };
+
+  const saveUserHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    console.log(user);
+    setIsLoading(false);
+  };
 
   if (isLoading || !user.name) {
-    return <div>Loading...</div>;
+    return <DashboardLoading />;
   }
 
   return (
@@ -70,7 +78,13 @@ const UserEdit = () => {
 
       <div className="h-[calc(100vh-100px)] border shadow-lg rounded-lg p-4">
         <div className="flex flex-row justify-between w-full">
-          <h1 className="text-2xl font-bold mb-6">Detail User</h1>
+          <Link
+            to="/dashboard/users"
+            className="flex flex-row gap-3 items-center mb-6 hover:opacity-75"
+          >
+            <ArrowBackIcon />
+            <h1 className="text-2xl font-bold">Detail User</h1>
+          </Link>
 
           <div className="flex flex-row gap-2 mt-2">
             <Button
@@ -96,8 +110,8 @@ const UserEdit = () => {
             </Button>
           </div>
         </div>
-        <form className="flex flex-col gap-4">
-          <div className="flex flex-col w-full gap-1">
+        <form onSubmit={saveUserHandler} className="flex flex-col gap-4">
+          <div className="flex flex-col w-full gap-1 font-bold">
             <label htmlFor="uid">UID</label>
             <TextField
               type="text"
@@ -108,7 +122,7 @@ const UserEdit = () => {
             />
           </div>
           <div className="flex flex-row gap-4">
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label htmlFor="nama">Nama*</label>
               <TextField
                 required
@@ -123,7 +137,7 @@ const UserEdit = () => {
                 }
               />
             </div>
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label htmlFor="email">Email*</label>
               <TextField
                 required
@@ -140,7 +154,7 @@ const UserEdit = () => {
             </div>
           </div>
           <div className="flex flex-row gap-4">
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label htmlFor="NIP">NIP*</label>
               <TextField
                 required
@@ -156,7 +170,7 @@ const UserEdit = () => {
                 }}
               />
             </div>
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label>Gender*</label>
               <Select
                 required
@@ -178,7 +192,7 @@ const UserEdit = () => {
             </div>
           </div>
           <div className="flex flex-row gap-4">
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label>Jabatan*</label>
               <Select
                 required
@@ -198,7 +212,7 @@ const UserEdit = () => {
                 ))}
               </Select>
             </div>
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label>Roles*</label>
               <Select
                 required
@@ -220,7 +234,7 @@ const UserEdit = () => {
             </div>
           </div>
           <div className="flex flex-row gap-4">
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label htmlFor="password">Password</label>
               <TextField
                 id="password"
@@ -233,7 +247,7 @@ const UserEdit = () => {
                 }}
               />
             </div>
-            <div className="flex flex-col w-full gap-1">
+            <div className="flex flex-col w-full gap-1 font-bold">
               <label htmlFor="passwordConfirmation">Konfirmasi Password</label>
               <TextField
                 id="passwordConfirmation"

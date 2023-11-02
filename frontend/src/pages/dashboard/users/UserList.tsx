@@ -8,10 +8,10 @@ import {
 } from "material-react-table";
 import { UserModel } from "../../../types/Auth.type";
 import { api } from "../../../lib/api";
-import { PuffLoader } from "react-spinners";
 import { Link } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, Button } from "@mui/material";
+import DashboardLoading from "../components/DashboardLoading";
 
 const UserList = () => {
   const { setCurrentPath } = useContext(LinkHighlightContext);
@@ -96,9 +96,7 @@ const UserList = () => {
 
   if (isLoading) {
     return (
-      <div className="fixed top-0 left-0 h-[calc(100vh-64px)] w-[calc(100%-240px)] ml-60 -z-10 mt-16 flex justify-center items-center">
-        <PuffLoader color="#1976d2" size={150} />
-      </div>
+      <DashboardLoading />
     );
   }
 
