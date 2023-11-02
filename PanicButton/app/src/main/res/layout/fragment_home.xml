@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_kebakaran"
         android:layout_width="match_parent"
         android:layout_height="125dp"
@@ -25,37 +25,40 @@
         android:layout_marginEnd="16dp"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
-        android:background="@color/primary_blue"
+        android:scaleType="fitCenter"
+        android:backgroundTint="@color/primary_blue"
         android:src="@drawable/fire_white_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lapas_logo" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_kerusuhan"
         android:layout_width="match_parent"
         android:layout_height="125dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/primary_blue"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/kerusuhan_white_small"
-        android:background="@color/primary_blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_kebakaran" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/btn_bencana"
         android:layout_width="match_parent"
         android:layout_height="125dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/primary_blue"
+        android:backgroundTint="@color/primary_blue"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/bencana_white_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

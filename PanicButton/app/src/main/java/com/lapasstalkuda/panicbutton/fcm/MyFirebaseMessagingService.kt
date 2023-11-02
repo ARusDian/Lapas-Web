@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -26,9 +27,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         Log.d(TAG, "From: ${message.from}")
         Log.d(TAG, "Message daya payload: ${message.data}")
-        Log.d(TAG, "Message Notification Body: ${message.data["body"]}")
+        Log.d(TAG, "Message Notification Body: ${message.notification?.body}")
 
-        sendNotification(message.data["title"], message.data["body"])
+        sendNotification(message.notification?.title, message.notification?.body)
     }
 
     private fun sendToken(token: String) {
@@ -44,6 +45,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             PendingIntent.FLAG_IMMUTABLE
         )
 
+        val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(applicationContext,
             NOTIFICATION_CHANNEL_ID
         )
@@ -52,6 +54,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(messageBody)
             .setContentIntent(contentPendingIntent)
             .setAutoCancel(true)
+            .setSound(soundUri)
             .setPriority(NotificationCompat.PRIORITY_MAX)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
