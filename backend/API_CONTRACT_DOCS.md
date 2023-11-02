@@ -249,7 +249,7 @@ Creates a new user
 }
 ```
 
-## **POST** /api/users/approve
+## **POST** /api/users/:id/approve
 
 Approves a user with the specified id
 
