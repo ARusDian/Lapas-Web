@@ -5,14 +5,11 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.nfc.Tag
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.google.firebase.messaging.remoteMessage
 import com.lapasstalkuda.panicbutton.MainActivity
 import com.lapasstalkuda.panicbutton.R
 
@@ -22,7 +19,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onNewToken(token)
 
         Log.d(TAG, "Refresh token: $token")
-        Toast.makeText(applicationContext, "$token", Toast.LENGTH_SHORT).show()
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
@@ -33,6 +29,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Message Notification Body: ${message.data["body"]}")
 
         sendNotification(message.data["title"], message.data["body"])
+    }
+
+    private fun sendToken(token: String) {
+
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
@@ -52,6 +52,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(messageBody)
             .setContentIntent(contentPendingIntent)
             .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
