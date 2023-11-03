@@ -18,8 +18,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-
-        sendToken(token)
         Log.d(TAG, "Refresh token: $token")
     }
 
@@ -31,10 +29,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(TAG, "Message Notification Body: ${message.notification?.body}")
 
         sendNotification(message.notification?.title, message.notification?.body)
-    }
-
-    private fun sendToken(token: String) {
-
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
