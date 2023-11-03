@@ -2,8 +2,7 @@ import { UserModel } from "./UserModel";
 
 export interface BasePushButtonLogModel {
     id?: number;
-    buttonId: number;
-    userId: number;
+    userId?: number;
     user?: UserModel;
     type: "KEBAKARAN" | "BENCANA" | "RUSUH";
     created_at: String;
@@ -12,4 +11,10 @@ export interface BasePushButtonLogModel {
 
 export interface PushButtonLogModel extends BasePushButtonLogModel {
     id: number;
+    userId: number;
+}
+
+export interface PushButtonLogCreationModel extends BasePushButtonLogModel {
+    userId?: number;
+    type: "KEBAKARAN" | "BENCANA" | "RUSUH";
 }

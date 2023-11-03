@@ -20,7 +20,7 @@ const DashboardIndex = () => {
         <title>Dashboard - LapasPanic</title>
       </Helmet>
 
-      <div className="text-3xl font-bold">Welcome backdd, {user.name}!</div>
+      <div className="text-3xl font-bold">Welcome back, {user.name}!</div>
     </>
   );
 };

@@ -4,3 +4,4 @@ export * from "./AuthTokenModel";
 export * from "./RequestsModel";
 export * from "./PushButtonLogModel";
 export * from "./RoleModel";
+export * from "./DeviceToken";

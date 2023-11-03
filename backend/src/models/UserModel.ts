@@ -18,8 +18,9 @@ export interface BaseUserModel extends CustomUserRecord {
     NIP: string;
     gender: "L" | "P";
     jabatan: string;
-    approved : boolean;
+    approved: boolean;
     
+    deviceToken? : string | null;
     
     role?: BaseRoleModel;
     roleId?: number;
