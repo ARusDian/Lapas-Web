@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.messaging.FirebaseMessaging
+import com.lapasstalkuda.panicbutton.MainActivity
 import com.lapasstalkuda.panicbutton.api.ApiService
 import com.lapasstalkuda.panicbutton.api.TokenRequest
 import com.lapasstalkuda.panicbutton.api.TokenResponse
@@ -59,9 +60,9 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             postToken(deviceToken)
-//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-//            startActivity(intent)
-//            finish()
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
 
         binding.btnRegister.setOnClickListener {
@@ -82,7 +83,7 @@ class LoginActivity : AppCompatActivity() {
         call!!.enqueue(object : Callback<TokenRequest?> {
             override fun onResponse(call: Call<TokenRequest?>?, response: Response<TokenRequest?>) {
                 val response: TokenRequest? = response.body()
-                Log.d("Login", "Berhasul coi ${response} tokennya: ${token}")
+                Log.d("Login", "Berhasil coi ${response} tokennya: ${token}")
             }
 
             override fun onFailure(call: Call<TokenRequest?>, t: Throwable) {

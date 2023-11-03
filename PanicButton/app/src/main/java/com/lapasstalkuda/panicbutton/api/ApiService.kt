@@ -1,6 +1,5 @@
 package com.lapasstalkuda.panicbutton.api
 
-import com.lapasstalkuda.panicbutton.data.NotificationRequest
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -15,7 +14,7 @@ interface ApiService {
     ): Call<TokenRequest?>?
 
     @POST("notification")
-    suspend fun notification(
-        @Body notification: NotificationRequest,
-    ): Response<ResponseBody>
+    fun notification(
+        @Body notification: NotificationRequest?,
+    ): Call<NotificationRequest?>?
 }
