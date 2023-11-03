@@ -2,5 +2,15 @@ package com.lapasstalkuda.panicbutton.api
 
 interface ApiService {
 
-    fun sendToken()
+    fun sendToken() {
+
+    }
+
+    fun login() {
+
+    }
+
+    fun register() {
+
+    }
 }
