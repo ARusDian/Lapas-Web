@@ -35,7 +35,6 @@ app.use("/api/users", userRouter);
 app.use("/api/roles", roleRouter);
 
 app.use(unknownEndpoint);
-
 app.use(errorHandler);
 
 export default app;

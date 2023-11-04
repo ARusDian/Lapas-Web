@@ -98,8 +98,8 @@ export const errorHandler = (error: Error | typeof ErrorResponse, request: Reque
 	);
 };
 
-export const unknownEndpoint = (request: Request, response: Response, next: NextFunction) => {
-	new ErrorResponse(
+export const unknownEndpoint = (err: Error, request: Request, _response: Response, next: NextFunction) => {
+	throw new ErrorResponse(
 		404,
 		"Unknown endpoint",
 		new ErrorDetails(
@@ -108,5 +108,4 @@ export const unknownEndpoint = (request: Request, response: Response, next: Next
 			`Unknown endpoint: ${request.method} ${request.path}`
 		)
 	);
-	next();
 };
