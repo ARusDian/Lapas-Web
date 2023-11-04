@@ -1,4 +1,4 @@
-import { ErrorResponse, FirebaseAuthError } from "../models";
+import { ErrorDetails, ErrorResponse, FirebaseAuthError } from "../models";
 import { NextFunction, Request, Response } from "express";
 import * as logger from "./Logger";
 
@@ -96,4 +96,17 @@ export const errorHandler = (error: Error | typeof ErrorResponse, request: Reque
 			message: "Internal Server Error"
 		}
 	);
+};
+
+export const unknownEndpoint = (request: Request, response: Response, next: NextFunction) => {
+	new ErrorResponse(
+		404,
+		"Unknown endpoint",
+		new ErrorDetails(
+			"unknownEndpoint",
+			"Unknown endpoint",
+			`Unknown endpoint: ${request.method} ${request.path}`
+		)
+	);
+	next();
 };
