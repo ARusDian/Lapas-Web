@@ -60,12 +60,15 @@ const Sidebar = ({ currentPath }: Props) => {
             linkTo="logs"
             startIcon={<ArticleIcon />}
             text="Logs"
-            className={`${currentPath === "logs" && "bg-white bg-opacity-10"}`}
+            className={`${currentPath === "logs" && "bg-white bg-opacity-10"} mt-1`}
           />
         </div>
 
-        <div className="text-lg p-2 border rounded-lg mb-2 text-center">
-          <LiveClock />
+        <div>
+          <Divider />
+          <div className="text-lg p-2 border rounded-lg my-2 text-center">
+            <LiveClock />
+          </div>
         </div>
       </div>
     </div>

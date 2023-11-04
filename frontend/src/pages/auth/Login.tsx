@@ -13,13 +13,17 @@ const Login = () => {
     password: "",
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     login(form).then(() => {
       navigate('/dashboard')
-    }).catch(err => console.log(err))
+    }).catch(err => {
+      console.log(err);
+      setError("Wrong email or password")
+    })
     .finally(() => setIsLoading(false));
   };
 
@@ -85,6 +89,9 @@ const Login = () => {
             >
               Login
             </Button>
+            {error && (
+              <div className="text-center text-red-600 text-sm">{error}</div>
+            )}
           </form>
         </div>
       </div>

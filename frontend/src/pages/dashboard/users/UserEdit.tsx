@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import DashboardLoading from "../components/DashboardLoading";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DeleteDialog from "../components/DeleteDialog";
 
 const UserEdit = () => {
   const { userId } = useParams();
@@ -29,6 +30,7 @@ const UserEdit = () => {
     roleId: 0,
   });
   const [roles, setRoles] = useState<Role[]>([]);
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,6 +68,16 @@ const UserEdit = () => {
     setIsLoading(false);
   };
 
+  const deleteUserHandler = () => {
+    console.log(user);
+    navigate("/dashboard/users", {
+      replace: true,
+      state: {
+        deleteUser: true,
+      }
+    });
+  };
+
   if (isLoading || !user.name) {
     return <DashboardLoading />;
   }
@@ -76,7 +88,7 @@ const UserEdit = () => {
         <title>Detail User - LapasPanic</title>
       </Helmet>
 
-      <div className="h-[calc(100vh-100px)] border shadow-lg rounded-lg p-4">
+      <div className="h-[calc(100vh-100px)] border bg-white bg-opacity-50 shadow-lg rounded-lg p-4">
         <div className="flex flex-row justify-between w-full">
           <Link
             to="/dashboard/users"
@@ -261,17 +273,30 @@ const UserEdit = () => {
               />
             </div>
           </div>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            size="large"
-            disabled={!user.approved}
-          >
-            Simpan
-          </Button>
+          <div className="flex flex-row gap-2">
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              className="w-full"
+              disabled={!user.approved}
+            >
+              Simpan
+            </Button>
+            <Button
+              type="button"
+              variant="contained"
+              color="error"
+              size="large"
+              onClick={() => setOpenDialog(true)}
+            >
+              Hapus
+            </Button>
+          </div>
         </form>
       </div>
+      <DeleteDialog open={openDialog} setOpen={setOpenDialog} submitHandler={deleteUserHandler}/>
     </HelmetProvider>
   );
 };

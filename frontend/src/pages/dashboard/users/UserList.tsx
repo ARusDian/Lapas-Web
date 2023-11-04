@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useMemo } from "react";
 import LinkHighlightContext from "../../../contexts/LinkHighlightContext";
-import { Helmet } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   MaterialReactTable,
   useMaterialReactTable,
@@ -8,7 +10,7 @@ import {
 } from "material-react-table";
 import { UserModel } from "../../../types/Auth.type";
 import { api } from "../../../utils/api";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, Button } from "@mui/material";
 import DashboardLoading from "../components/DashboardLoading";
@@ -17,7 +19,8 @@ const UserList = () => {
   const { setCurrentPath } = useContext(LinkHighlightContext);
   const [users, setUsers] = React.useState<UserModel[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-
+  const location = useLocation();
+  console.log(location);
   const fetchUsers = () => {
     api
       .get("/users", {
@@ -33,6 +36,22 @@ const UserList = () => {
       });
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    if (location.state && location.state.deleteUser) {
+      toast.info(`User berhasil dihapus!`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      window.history.replaceState(null, "");
+    } 
+  }, []);
 
   useEffect(() => {
     setCurrentPath("users");
@@ -95,21 +114,22 @@ const UserList = () => {
   });
 
   if (isLoading) {
-    return (
-      <DashboardLoading />
-    );
+    return <DashboardLoading />;
   }
 
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
         <title>Daftar User - LapasPanic</title>
       </Helmet>
-      <h1 className="text-2xl font-bold mb-2">Daftar Pengguna</h1>
-      <div className="shadow-xl rounded-lg">
-        <MaterialReactTable table={table} />
+      <ToastContainer />
+      <div className="p-4 bg-white bg-opacity-50 shadow-xl border rounded-lg">
+        <h1 className="text-2xl font-bold mb-2">Daftar Pengguna</h1>
+        <div className="rounded-lg">
+          <MaterialReactTable table={table} />
+        </div>
       </div>
-    </>
+    </HelmetProvider>
   );
 };
 

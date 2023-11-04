@@ -34,7 +34,7 @@ const Create = () => {
       <Helmet>
         <title>Tambah User - LapasPanic</title>
       </Helmet>
-      <div className="min-h-[600px] border shadow-lg rounded-lg p-4">
+      <div className="h-fit bg-white bg-opacity-50 border shadow-lg rounded-lg p-4">
         <h1 className="text-2xl font-bold mb-6">Tambah User</h1>
         <UserForm onSubmit={formSubmitHandler} />
       </div>
