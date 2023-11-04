@@ -13,6 +13,7 @@ import {
 import DashboardLoading from "../components/DashboardLoading";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteDialog from "../components/DeleteDialog";
+import { ClipLoader } from "react-spinners";
 
 const UserEdit = () => {
   const { userId } = useParams();
@@ -69,16 +70,18 @@ const UserEdit = () => {
   };
 
   const deleteUserHandler = () => {
-    console.log(user);
-    navigate("/dashboard/users", {
-      replace: true,
-      state: {
-        deleteUser: true,
-      }
-    });
+    setIsLoading(true);
+    setTimeout(() => {
+      navigate("/dashboard/users", {
+        replace: true,
+        state: {
+          deleteUser: true,
+        },
+      });
+    }, 1500);
   };
 
-  if (isLoading || !user.name) {
+  if (isLoading && !user.name) {
     return <DashboardLoading />;
   }
 
@@ -280,23 +283,33 @@ const UserEdit = () => {
               color="primary"
               size="large"
               className="w-full"
-              disabled={!user.approved}
+              disabled={!user.approved || isLoading}
             >
               Simpan
             </Button>
-            <Button
-              type="button"
-              variant="contained"
-              color="error"
-              size="large"
-              onClick={() => setOpenDialog(true)}
-            >
-              Hapus
-            </Button>
+            <div className="flex items-center gap-2 transition-all delay-300 ease-in-out">
+              <Button
+                type="button"
+                variant="contained"
+                color="error"
+                size="large"
+                onClick={() => setOpenDialog(true)}
+                disabled={!user.approved || isLoading}
+              >
+                Hapus
+              </Button>
+              <div className={`${!isLoading && "hidden"}`}>
+                <ClipLoader color="#1976d2"  />
+              </div>
+            </div>
           </div>
         </form>
       </div>
-      <DeleteDialog open={openDialog} setOpen={setOpenDialog} submitHandler={deleteUserHandler}/>
+      <DeleteDialog
+        open={openDialog}
+        setOpen={setOpenDialog}
+        submitHandler={deleteUserHandler}
+      />
     </HelmetProvider>
   );
 };
