@@ -16,6 +16,11 @@ const seedRole = async () => {
 };
 
 const seedUser = async () => {
+	const role = await prisma.role.findFirst({
+		where: {
+			name: "admin",
+		},
+	});
 	return UserData.map(async (user) => {
 		await prisma.user.create({
 			data: {
@@ -30,7 +35,7 @@ const seedUser = async () => {
 				approved: user.approved,
 				role: {
 					connect: {
-						id: user.roleId,
+						id: role?.id,
 					}
 				}
 			},
@@ -40,6 +45,9 @@ const seedUser = async () => {
 
 async function main() {
 	// If There's Error, Try to seed the data in this order one by one
+
+	await prisma.pushButtonLog.deleteMany();
+	console.log("Deleted records in pushButtonLog table");
 
 	await prisma.user.deleteMany();
 	console.log("Deleted records in user table");
