@@ -24,7 +24,7 @@ const seedUser = async () => {
 	return UserData.map(async (user) => {
 		await prisma.user.create({
 			data: {
-				uid: null,
+				uid: "VNkMX7rigTYukbcZgO0eTyewlyt1",
 				name: user.name,
 				email: user.email,
 				password: user.password,
