@@ -32,7 +32,11 @@ const DashboardLayout = () => {
       .catch((err) => {
         console.log(err);
         localStorage.removeItem("accessToken");
-        navigate("/");
+        navigate("/", {
+          state: {
+            tokenExpired: true,
+          }
+        });
       });
   }, []);
 

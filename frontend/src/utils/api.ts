@@ -11,6 +11,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
     'Access-Control-Allow-Origin': '*',
+    'ngrok-skip-browser-warning': 'skip-browser-warning',
   },
 });
 
