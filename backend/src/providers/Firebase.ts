@@ -1,4 +1,7 @@
 import admin from "firebase-admin";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const firebaseConfig = {
     apiKey: process.env.FIREBASE_API_KEY,
