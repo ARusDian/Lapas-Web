@@ -1,5 +1,3 @@
-import { PushButtonLog } from "./log.type";
-
 interface LoginProps {
   email: string,
   password: string
@@ -10,39 +8,38 @@ interface RegisterProps {
   NIP?: string,
   gender: "L" | "P",
   jabatan: string,
-  roles: string[],
+  roleId: number,
   email: string,
   password: string,
-  confirm_password: string
+  confirm_password?: string
+  approved: boolean
 };
 
-interface UserModel {
-  id?: number,
+interface BaseUserModel {
+  name: string,
+  email: string,
+}
+
+interface UserModel extends BaseUserModel{
+  id: number,
   
   //Firebase Auth
   uid: string,
-  email: string,
   disabled: boolean,
 
   //User Data
-  name: string,
-  NIP?: string,
+  NIP: string,
   gender: "L" | "P",
   jabatan: string,
   approved: boolean,
-
-  roleId?: number,
-  roles?: Role[],
-
-  pushButtonLog?: PushButtonLog[],
-
-  created_at?: string,
-  updated_at?: string
+  roleId?: number
 }
 
 interface Role {
   id: number,
-  name: string
+  name: string,
+  created_at?: string,
+  updated_at?: string
 }
 
-export type { LoginProps, RegisterProps, UserModel, Role };
+export type { LoginProps, RegisterProps, BaseUserModel, UserModel, Role };
