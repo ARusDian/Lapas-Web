@@ -1,17 +1,42 @@
+import { useContext, useEffect } from "react";
 import { RegisterProps } from "../../../types/Auth.type";
 import UserForm from "../components/UserForm";
+import LinkHighlightContext from "../../../contexts/LinkHighlightContext";
+import { Helmet } from "react-helmet-async";
+import { api } from "../../../utils/api";
 
 const Create = () => {
-  const formSubmitHandler = (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => {
+  const { setCurrentPath } = useContext(LinkHighlightContext);
+
+  useEffect(() => {
+    setCurrentPath("create");
+
+    return () => {
+      setCurrentPath("");
+    };
+  }, [setCurrentPath]);
+
+  const formSubmitHandler = (
+    e: React.FormEvent<HTMLFormElement>,
+    data: RegisterProps
+  ) => {
     e.preventDefault();
-    alert(data);
+    api.post('/users', data, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    }).then(res => console.log(res))
+    .catch(err => console.log(err));
   };
 
   return (
     <>
-      <h1 className="text-2xl font-bold mb-2">Tambah User</h1>
-      <div className="min-h-[600px] border shadow-lg rounded-lg p-4">
-        <UserForm onSubmit={formSubmitHandler}/>
+      <Helmet>
+        <title>Tambah User - LapasPanic</title>
+      </Helmet>
+      <div className="h-fit bg-white bg-opacity-50 border shadow-lg rounded-lg p-4">
+        <h1 className="text-2xl font-bold mb-6">Tambah User</h1>
+        <UserForm onSubmit={formSubmitHandler} />
       </div>
     </>
   );

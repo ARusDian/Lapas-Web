@@ -5,8 +5,9 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import React from "react";
-import { RegisterProps } from "../../../types/Auth.type";
+import React, { useEffect, useState } from "react";
+import { RegisterProps, Role } from "../../../types/Auth.type";
+import { getAllRoles } from "../../../utils/api";
 
 interface Props {
   onSubmit: (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => void;
@@ -21,16 +22,19 @@ const UserForm = ({ onSubmit, data }: Props) => {
       NIP: "",
       gender: "L",
       jabatan: "",
-      roles: [],
+      roleId: 2,
       password: "",
       confirm_password: "",
+      approved: true,
     }
   );
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const jabatanSelectHandler = (event: SelectChangeEvent) => {
     setForm((prev) => ({
       ...prev,
-      jabatan: event.target.value as "L" | "P",
+      jabatan: event.target.value,
     }));
   };
 
@@ -41,23 +45,26 @@ const UserForm = ({ onSubmit, data }: Props) => {
     }));
   };
 
-  const roleSelectHandler = (event: SelectChangeEvent<string | string[]>) => {
-    const {
-      target: { value },
-    } = event;
-    setForm((prev) => ({
-      ...prev,
-      roles: typeof value === "string" ? value.split(",") : value,
-    }));
-  };
-
   const formSetHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+    getAllRoles().then((res) => {
+      setRoles(res);
+      setIsLoading(false);
+    });
+  }, []);
+
   return (
-    <form onSubmit={(e) => onSubmit(e, form)} className="flex flex-col gap-4">
+    <form
+      onSubmit={(e) => {
+        onSubmit(e, form);
+        setIsLoading(true);
+      }}
+      className="flex flex-col gap-4"
+    >
       <div className="flex flex-row gap-4">
         <div className="flex flex-col w-full gap-1">
           <label htmlFor="nama">Nama*</label>
@@ -81,6 +88,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
             variant="outlined"
             size="small"
             name="email"
+            value={form.email}
             onChange={formSetHandler}
           />
         </div>
@@ -97,6 +105,9 @@ const UserForm = ({ onSubmit, data }: Props) => {
             size="small"
             value={form.NIP}
             onChange={formSetHandler}
+            inputProps={{
+              minLength: 18,
+            }}
           />
         </div>
         <div className="flex flex-col w-full gap-1">
@@ -124,9 +135,9 @@ const UserForm = ({ onSubmit, data }: Props) => {
             size="small"
             onChange={jabatanSelectHandler}
           >
-            {["Petugas", "Penjaga", "Pengunjung"].map((role) => (
-              <MenuItem key={role} value={role}>
-                {role}
+            {["Petugas", "Penjaga"].map((jabatan) => (
+              <MenuItem key={jabatan} value={jabatan}>
+                {jabatan}
               </MenuItem>
             ))}
           </Select>
@@ -135,14 +146,18 @@ const UserForm = ({ onSubmit, data }: Props) => {
           <label>Roles*</label>
           <Select
             required
-            multiple
-            value={form.roles}
+            value={`${roles.length > 0 ? form.roleId : ""}`}
             size="small"
-            onChange={roleSelectHandler}
+            onChange={(e: SelectChangeEvent) => {
+              setForm((prev) => ({
+                ...prev,
+                roleId: Number(e.target.value),
+              }));
+            }}
           >
-            {["super-admin", "admin", "petugas"].map((role) => (
-              <MenuItem key={role} value={role}>
-                {role}
+            {roles.map((role) => (
+              <MenuItem key={role.id} value={role.id}>
+                {role.name}
               </MenuItem>
             ))}
           </Select>
@@ -181,7 +196,13 @@ const UserForm = ({ onSubmit, data }: Props) => {
           />
         </div>
       </div>
-      <Button type="submit" variant="contained" color="primary" size="large">
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        size="large"
+        disabled={form.password !== form.confirm_password || isLoading}
+      >
         Tambah
       </Button>
     </form>
