@@ -56,7 +56,12 @@ const UserEdit = () => {
       .put(`/users/${userId}/approve`)
       .then((res) => {
         console.log(res);
-        navigate("/dashboard/users");
+        navigate("/dashboard/users", {
+          replace: true,
+          state: {
+            approveUser: true,
+          },
+        });
       })
       .catch((err) => console.log(err));
     setIsLoading(false);
@@ -90,7 +95,6 @@ const UserEdit = () => {
       <Helmet>
         <title>Detail User - LapasPanic</title>
       </Helmet>
-
       <div className="h-[calc(100vh-100px)] border bg-white bg-opacity-50 shadow-lg rounded-lg p-4">
         <div className="flex flex-row justify-between w-full">
           <Link
@@ -299,7 +303,7 @@ const UserEdit = () => {
                 Hapus
               </Button>
               <div className={`${!isLoading && "hidden"}`}>
-                <ClipLoader color="#1976d2"  />
+                <ClipLoader color="#1976d2" />
               </div>
             </div>
           </div>

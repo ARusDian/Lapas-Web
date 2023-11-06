@@ -9,7 +9,7 @@ import {
   type MRT_ColumnDef,
 } from "material-react-table";
 import { UserModel } from "../../../types/Auth.type";
-import { api } from "../../../utils/api";
+import { getUsers } from "../../../utils/api";
 import { Link, useLocation } from "react-router-dom";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, Button } from "@mui/material";
@@ -20,14 +20,9 @@ const UserList = () => {
   const [users, setUsers] = React.useState<UserModel[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const location = useLocation();
-  console.log(location);
+
   const fetchUsers = () => {
-    api
-      .get("/users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-      })
+    getUsers()
       .then((res) => {
         setUsers(res.data.data.data);
       })
@@ -38,19 +33,32 @@ const UserList = () => {
   };
 
   useEffect(() => {
-    if (location.state && location.state.deleteUser) {
-      toast.info(`User berhasil dihapus!`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
-      });
+    if (location.state) {
+      if (location.state.deleteUser) {
+        toast.info(`User berhasil dihapus!`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (location.state.approveUser) {
+        toast.info(`User berhasil diapprove!`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      }
       window.history.replaceState(null, "");
-    } 
+    }
   }, []);
 
   useEffect(() => {

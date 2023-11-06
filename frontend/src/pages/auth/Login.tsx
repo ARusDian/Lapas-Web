@@ -3,7 +3,7 @@ import { LoginProps } from "../../types/Auth.type";
 import { Button, TextField } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../utils/api";
 
 const Login = () => {
@@ -14,6 +14,7 @@ const Login = () => {
   });
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>("");
+  const location = useLocation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,6 +31,11 @@ const Login = () => {
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
       navigate("/dashboard");
+    }
+    
+    if (location.state && location.state.tokenExpired) {
+      setError("Sesi anda telah habis, harap login kembali!");
+      window.history.replaceState(null, "");
     }
   }, [])
 

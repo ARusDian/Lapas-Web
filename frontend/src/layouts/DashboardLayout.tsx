@@ -24,6 +24,7 @@ const DashboardLayout = () => {
   useEffect(() => {
     getAuthData()
       .then((res) => {
+        console.log(res)
         setUser({
           name: res.data.data.data.name,
           email: res.data.data.data.email,
@@ -32,7 +33,11 @@ const DashboardLayout = () => {
       .catch((err) => {
         console.log(err);
         localStorage.removeItem("accessToken");
-        navigate("/");
+        navigate("/", {
+          state: {
+            tokenExpired: true,
+          }
+        });
       });
   }, []);
 
