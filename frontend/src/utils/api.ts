@@ -41,11 +41,12 @@ const getAuthData = async () => {
     const accessToken = localStorage.getItem('accessToken');
     const response = await api.get('/auth/authenticated', {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        'authorization': `bearer ${accessToken}`,
       },
     });
     return response;
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }

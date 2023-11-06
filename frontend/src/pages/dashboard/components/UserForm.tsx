@@ -27,7 +27,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
       jabatan: "",
       roleId: 5,
       password: "",
-      confirm_password: "",
+      confirmPassword: "",
       approved: true,
     }
   );
@@ -94,6 +94,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
     });
   }, []);
 
+  console.log(form);
   return (
     <form
       onSubmit={(e) => {
@@ -228,9 +229,9 @@ const UserForm = ({ onSubmit, data }: Props) => {
             type="password"
             variant="outlined"
             size="small"
-            name="confirm_password"
+            name="confirmPassword"
             onChange={formSetHandler}
-            error={form.password !== form.confirm_password}
+            error={form.password !== form.confirmPassword}
             inputProps={{
               minLength: 8,
             }}

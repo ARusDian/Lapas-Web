@@ -133,11 +133,12 @@ export const createUserService = async (req: Request) => {
 		password: password,
 		disabled: false
 	}).then((UserRecord) => {
+		console.log(UserRecord)
 		return prisma.user.create({
 			data: {
 				name: name,
 				email: UserRecord.email || email,
-				password: UserRecord.passwordHash!,
+				password: "",
 				uid: UserRecord.uid,
 				disabled: UserRecord.disabled,
 				NIP: NIP,
@@ -161,6 +162,19 @@ export const createUserService = async (req: Request) => {
 					"PrismaClientKnownRequestError",
 					"Error Saving to Database",
 					error.meta.cause
+				)
+			);
+		}
+		if (error instanceof Prisma.PrismaClientValidationError) {
+			error = error as Prisma.PrismaClientValidationError;
+			console.log(error);
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientValidationError",
+					"Error Saving to Database",
+					error
 				)
 			);
 		}
@@ -236,7 +250,7 @@ export const updateUserService = async (id: number | string, req: Request) => {
 		},
 		data: {
 			name: name,
-			email:  email,
+			email: email,
 			password: password,
 			NIP: NIP,
 			gender: gender,
@@ -309,7 +323,7 @@ export const updateApprovedUserService = async (id: number | string, req: Reques
 			data: {
 				name: name,
 				email: UserRecord.email || email,
-				password: UserRecord.passwordHash,
+				password: "",
 				uid: UserRecord.uid,
 				disabled: UserRecord.disabled,
 				NIP: NIP,
@@ -381,7 +395,7 @@ export const deleteApprovedUserService = async (id: number | string) => {
 				}
 			});
 		});
-	} catch (error : unknown) {
+	} catch (error: unknown) {
 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
 			error = error as Prisma.PrismaClientKnownRequestError;
 			throw new ErrorResponse(
@@ -424,7 +438,7 @@ export const approveUserService = async (id: number | string) => {
 			data: {
 				uid: UserRecord.uid,
 				approved: true,
-				password: UserRecord.passwordHash,
+				password: "",
 			}
 		});
 	}).catch((error) => {

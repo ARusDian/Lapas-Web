@@ -11,7 +11,7 @@ interface RegisterProps {
   roleId: number,
   email: string,
   password: string,
-  confirm_password?: string
+  confirmPassword?: string
   approved: boolean
 };
 

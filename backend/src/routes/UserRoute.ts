@@ -3,9 +3,6 @@ import { approveUser, createUser, deleteApprovedUser, deleteUser, getUser, getUs
 import { verifyUser, adminOnly } from "../middleware";
 const userRouter = express.Router();
 
-// userRouter.put("/:id", updateUser);
-// userRouter.put("/:id/approve", updateApprovedUser);
-
 
 userRouter.get("/", verifyUser, adminOnly, getUsers);
 userRouter.get("/:id", verifyUser, adminOnly, getUser);
