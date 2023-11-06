@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import { AuthRouter, notificationRouter, roleRouter, userRouter } from "./routes";
-import { requestLogger, unknownEndpoint, errorHandler, verifyUser, adminOnly } from "./middleware";
+import { unknownEndpoint, errorHandler, PrismaErrorHandler } from "./middleware";
 import initializationProviders from "./providers";
 
 dotenv.config();
@@ -28,13 +28,12 @@ app.get("/api", async (req, res) => {
 
 app.use("/api", notificationRouter);
 app.use("/api/auth", AuthRouter);
-app.use(verifyUser);
 
-app.use(adminOnly);
 app.use("/api/users", userRouter);
 app.use("/api/roles", roleRouter);
 
 app.use(unknownEndpoint);
+app.use(PrismaErrorHandler);
 app.use(errorHandler);
 
 export default app;
