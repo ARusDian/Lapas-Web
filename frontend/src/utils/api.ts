@@ -43,10 +43,25 @@ const getAuthData = async () => {
         'Authorization': `Bearer ${accessToken}`,
       },
     });
-    return response as any;
+    return response;
   } catch (error) {
     throw error;
   }
 }
 
-export { api, getAllRoles, login, getAuthData }
+const getUsers = async () => {
+  try {
+    const accessToken = localStorage.getItem('accessToken');
+    const response = await api
+      .get("/users", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { api, getAllRoles, login, getAuthData, getUsers }
