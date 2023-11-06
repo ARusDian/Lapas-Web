@@ -1,5 +1,5 @@
 import { Response, NextFunction } from "express";
-import { getUserByIdService } from "../services";
+import { getRolesService, getUserByIdService } from "../services";
 import { ErrorResponse, ErrorDetails, UserAuthInfoRequest } from "../models";
 
 
@@ -7,10 +7,11 @@ export const adminOnly = async (req: UserAuthInfoRequest, res: Response, next: N
 	try {
 		const role = await getRole(req);
 
-		console.log(role);
+		const roles = await getRolesService();
 
-
-		if (role !== 1 && role !== 2) { 
+		const adminRole = roles.find((role) => role.name === "admin");
+		
+		if (role !== adminRole?.id) { 
 			throw new ErrorResponse(
 				401,
 				"Unauthorized",
