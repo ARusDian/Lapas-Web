@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 import { Request } from "express";
 import { UserInputValidation, numberValidation } from ".";
 import { ErrorResponse, ErrorDetails, UserModel } from "../models";
@@ -152,6 +152,18 @@ export const createUserService = async (req: Request) => {
 			}
 		});
 	}).catch((error) => {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					error.meta.cause
+				)
+			);
+		}
 		throw new ErrorResponse(
 			500,
 			"Internal Server Error",
@@ -180,7 +192,7 @@ export const createRegistrationUserService = async (req: Request) => {
 		data: {
 			name: name,
 			email: email,
-			password: password,
+			password: password!,
 			uid: null,
 			disabled: false,
 			NIP: NIP,
@@ -209,22 +221,54 @@ export const createRegistrationUserService = async (req: Request) => {
 export const updateUserService = async (id: number | string, req: Request) => {
 	const user = await getUserByIdService(id);
 
-	const { name, email, password, roleId } = await UserInputValidation(req.body, "updateUser");
-	
-	return await prisma.user.update({
+	const {
+		email,
+		name,
+		NIP,
+		gender,
+		jabatan,
+		password,
+		roleId
+	} = await UserInputValidation(req.body, "updateUser", true);
+	return prisma.user.update({
 		where: {
 			id: user.id
 		},
 		data: {
 			name: name,
-			email: email,
+			email:  email,
 			password: password,
+			NIP: NIP,
+			gender: gender,
+			jabatan: jabatan,
 			role: {
 				connect: {
-					id: roleId || 2
+					id: roleId
 				}
 			}
 		}
+	}).catch((error) => {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					error.meta.cause
+				)
+			);
+		}
+		throw new ErrorResponse(
+			500,
+			"Internal Server Error",
+			new ErrorDetails(
+				"updateUser",
+				"Update Error",
+				error
+			)
+		);
 	});
 };
 
@@ -252,7 +296,7 @@ export const updateApprovedUserService = async (id: number | string, req: Reques
 		password,
 		approved,
 		roleId
-	} = await UserInputValidation(req.body, "updateUser");
+	} = await UserInputValidation(req.body, "updateUser", true);
 
 	return await getAuth().updateUser(user.uid, {
 		email: email,
@@ -274,15 +318,27 @@ export const updateApprovedUserService = async (id: number | string, req: Reques
 				approved: approved,
 				role: {
 					connect: {
-						id: roleId || 2
+						id: roleId
 					}
 				}
 			}
 		});
 	}).catch((error) => {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					error.meta.cause
+				)
+			);
+		}
 		throw new ErrorResponse(
 			500,
-			"Internal Server Error",
+			"Bad Request",
 			new ErrorDetails(
 				"updateUser",
 				"Update Error",
@@ -317,13 +373,40 @@ export const deleteApprovedUserService = async (id: number | string) => {
 		);
 	}
 
-	return await getAuth().deleteUser(user.uid).then(() => {
-		return prisma.user.delete({
-			where: {
-				id: user.id
-			}
+	try {
+		return await getAuth().deleteUser(user.uid).then(() => {
+			return prisma.user.delete({
+				where: {
+					id: user.id
+				}
+			});
 		});
-	});
+	} catch (error : unknown) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					// @ts-ignore
+					error.meta.cause
+				)
+			);
+		}
+
+
+		throw new ErrorResponse(
+			500,
+			"Bad Request",
+			new ErrorDetails(
+				"deleteUser",
+				"Delete Error",
+				JSON.stringify(error)
+			)
+		);
+	}
 };
 
 export const approveUserService = async (id: number | string) => {
@@ -345,11 +428,23 @@ export const approveUserService = async (id: number | string) => {
 			}
 		});
 	}).catch((error) => {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					error.meta.cause
+				)
+			);
+		}
 		throw new ErrorResponse(
-			400,
-			"Bad Request",
+			500,
+			"Internal Server Error",
 			new ErrorDetails(
-				"createUser",
+				"createApprovedUser",
 				"Create Error",
 				error
 			)
@@ -384,11 +479,23 @@ export const setDisableUserService = async (id: number | string) => {
 			}
 		});
 	}).catch((error) => {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					error.meta.cause
+				)
+			);
+		}
 		throw new ErrorResponse(
-			400,
-			"Bad Request",
+			500,
+			"Internal Server Error",
 			new ErrorDetails(
-				"createUser",
+				"createApprovedUser",
 				"Create Error",
 				error
 			)
