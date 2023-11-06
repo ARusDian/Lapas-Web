@@ -27,10 +27,12 @@ export class ErrorResponse implements FirebaseAuthError {
 
 export class ErrorDetails extends Error {
 	name: string;
+	message: string;
 	details: string;
 	constructor(name: string, message: string, details: string) {
 		super(message);
 		this.name = name;
+		this.message = message;
 		this.details = details;
 		Error.captureStackTrace(this, this.constructor);
 	}
