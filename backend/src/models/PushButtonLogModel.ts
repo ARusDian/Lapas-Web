@@ -5,8 +5,7 @@ export interface BasePushButtonLogModel {
     userId?: number;
     user?: UserModel;
     type: "KEBAKARAN" | "BENCANA" | "RUSUH";
-    created_at: String;
-    updated_at: String;
+    createdAt?: String;
 }
 
 export interface PushButtonLogModel extends BasePushButtonLogModel {
