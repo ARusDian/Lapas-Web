@@ -97,7 +97,14 @@ export const getPushButtonLogService = async (req: UserAuthInfoRequest) => {
             id: true,
             type: true,
             userId: true,
-            createdAt: true
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                }
+            }
         }
     }).catch((error) => {
         if (error instanceof Error) {
