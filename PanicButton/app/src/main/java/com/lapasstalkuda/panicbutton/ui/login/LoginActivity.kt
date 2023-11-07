@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.messaging.FirebaseMessaging
 import com.lapasstalkuda.panicbutton.MainActivity
 import com.lapasstalkuda.panicbutton.api.ApiService
@@ -25,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var deviceToken: String
+    private lateinit var auth: FirebaseAuth
 
     private val requestNotificationPermissionLauncher =
         registerForActivityResult(
@@ -47,6 +49,8 @@ class LoginActivity : AppCompatActivity() {
             requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
+        auth = FirebaseAuth.getInstance()
+
         // Dapatin device tokennya disini
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (!task.isSuccessful) {
@@ -59,10 +63,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-            postToken(deviceToken)
-            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+//            postToken(deviceToken)
+            val email = binding.inputUsername.text.toString()
+            val password = binding.inputPassword.text.toString()
+            signIn(email, password)
         }
 
         binding.btnRegister.setOnClickListener {
@@ -71,9 +75,25 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    private fun signIn(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    Toast.makeText(this, "Sign-in berhasil sebagai ${user?.email}", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     private fun postToken(token: String) {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://74d6-36-85-32-10.ngrok-free.app/api/")
+            .baseUrl("https://admittedly-factual-tuna.ngrok-free.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -91,21 +111,5 @@ class LoginActivity : AppCompatActivity() {
             }
 
         })
-//        val client = ApiConfig.getApiService().sendToken(token)
-//        client.enqueue(object : retrofit2.Callback<TokenResponse> {
-//            override fun onResponse(call: Call<TokenResponse>, response: Response<TokenResponse>) {
-//                val responseBody = response.body()
-//                if (response.isSuccessful && responseBody != null) {
-//                    Toast.makeText(this@LoginActivity, "Berhasil", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Log.e("LoginActivity", "onFailure: tes ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-//                Log.e("LoginActivity", "onFailure: ${t.message}")
-//            }
-//
-//        })
     }
 }

@@ -17,4 +17,9 @@ interface ApiService {
     fun notification(
         @Body notification: NotificationRequest?,
     ): Call<NotificationRequest?>?
+
+    @POST("auth/register")
+    fun register(
+        @Body register: RegisterRequest?,
+    ): Call<RegisterRequest?>?
 }
