@@ -804,5 +804,73 @@ Save user device token for push notification
 }
 ```
 
+## **GET** /api/pushButtonLogs
 
+Returns all notification logs in the database
 
+-   **URL Params**  
+    None
+-   **Data Params**
+    None
+-   **Headers**
+    
+        Content-Type: application/json  
+        authorization: bearer [token]
+
+-   **Success Response:**
+
+-   **Code:** 200  
+    **Content:**
+
+```json
+{
+    "code": 200,
+    "status": "OK",
+    "data": {
+        "name": "pushButtonLogs",
+        "data": {
+            {<notification_object>},
+            {<notification_object>},
+            {<notification_object>}
+        }
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+    
+## **POST** /api/notification
+
+Send notification to all user
+
+-   **URL Params**  
+    None
+-   **Data Params**
+    ```json
+    {
+        "type": "KEBAKARAN" | "BENCANA" | "RUSUH" ,
+    }
+    ```
+-   **Headers**
+    
+        Content-Type: application/json  
+        authorization: bearer [token]
+
+-   **Success Response:**
+
+-   **Code:** 201  
+    **Content:**
+    
+```json
+{
+    "code": 201,
+    "status": "PushButtonLog",
+    "data": {
+        "data" : {<notification_object>},
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
