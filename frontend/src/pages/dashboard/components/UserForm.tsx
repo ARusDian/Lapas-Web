@@ -9,6 +9,8 @@ import React, { useEffect, useState } from "react";
 import { RegisterProps, Role } from "../../../types/Auth.type";
 import { api, getAllRoles } from "../../../utils/api";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
+import { ErrorData } from "../../../types/error.type";
 
 interface Props {
   onSubmit?: (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => void;
@@ -32,22 +34,38 @@ const UserForm = ({ onSubmit, data }: Props) => {
   const [roles, setRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+  const [error, setError] = useState<ErrorData>({
+    type: null,
+    details: null,
+  });
 
   const formSubmitHandler = (
     e: React.FormEvent<HTMLFormElement>,
     data: RegisterProps
   ) => {
     e.preventDefault();
-    api.post('/users', data, {
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    }).then(res => console.log(res))
-    .catch(err => console.log(err))
-    .finally(() => {
-      navigate('/dashboard/users');
-    })
-
+    api
+      .post("/users", data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        navigate("/dashboard/users");
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          setError({
+            type: "email",
+            details: err.response.data.error.details,
+          });
+        }
+        console.log(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const jabatanSelectHandler = (event: SelectChangeEvent) => {
@@ -99,7 +117,10 @@ const UserForm = ({ onSubmit, data }: Props) => {
           />
         </div>
         <div className="flex flex-col w-full gap-1">
-          <label htmlFor="email">Email*</label>
+          <div className="flex flex-row items-center justify-between w-full gap-2">
+            <label htmlFor="email">Email* </label>
+            {error.type === "email" && <label className="text-xs text-red-500 font-bold">{error.details}</label>}
+          </div>
           <TextField
             required
             id="email"
@@ -108,6 +129,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
             size="small"
             name="email"
             value={form.email}
+            error={error.type === "email"}
             onChange={formSetHandler}
           />
         </div>
@@ -215,15 +237,21 @@ const UserForm = ({ onSubmit, data }: Props) => {
           />
         </div>
       </div>
-      <Button
-        type="submit"
-        variant="contained"
-        color="primary"
-        size="large"
-        disabled={form.password !== form.confirm_password || isLoading}
-      >
-        Tambah
-      </Button>
+      <div className="flex flex-row w-full gap-4 items-center">
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          size="large"
+          className="flex-grow"
+          disabled={form.password !== form.confirm_password || isLoading}
+        >
+          Tambah
+        </Button>
+        <div className={`${!isLoading && "hidden"} flex`}>
+          <ClipLoader color="#1976d2" />
+        </div>
+      </div>
     </form>
   );
 };
