@@ -67,8 +67,8 @@ const UserEdit = () => {
           },
         });
       })
-      .catch((err) => console.log(err));
-    setIsLoading(false);
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
   };
 
   const saveUserHandler = (e: React.FormEvent<HTMLFormElement>) => {
