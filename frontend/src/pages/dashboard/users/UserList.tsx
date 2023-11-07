@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import LinkHighlightContext from "../../../contexts/LinkHighlightContext";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { ToastContainer, toast } from "react-toastify";
@@ -32,45 +32,31 @@ const UserList = () => {
       .finally(() => setIsLoading(false));
   };
 
+  const showToast = useCallback((message: string) => {
+    toast.info(message, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+  }, []);
+
   useEffect(() => {
-    if (location.state) {
+    if (location && location.state) {
       if (location.state.deleteUser) {
-        toast.info(`User berhasil dihapus!`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        showToast("User berhasil dihapus")
       } else if (location.state.approveUser) {
-        toast.info(`User berhasil diapprove!`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        showToast("User berhasil diapprove")
       } else if (location.state.saveUser) {
-        toast.info(`User berhasil disimpan!`, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "colored",
-        });
+        showToast("User berhasil disimpan")
       }
       window.history.replaceState(null, "");
     }
-  }, []);
+  }, [location, users]);
 
   useEffect(() => {
     setCurrentPath("users");
@@ -82,6 +68,11 @@ const UserList = () => {
 
   const dataColumns = useMemo<MRT_ColumnDef<UserModel>[]>(
     () => [
+      {
+        accessorKey: "id",
+        header: "ID",
+        sortDescFirst: true,
+      },
       {
         accessorKey: "name",
         header: "Nama",
@@ -130,6 +121,14 @@ const UserList = () => {
         </Button>
       </Link>
     ),
+    initialState: {
+      sorting: [
+        {
+          id: 'id',
+          desc: true
+        }
+      ]
+    }
   });
 
   if (isLoading) {
@@ -138,13 +137,13 @@ const UserList = () => {
 
   return (
     <HelmetProvider>
+      <ToastContainer />
       <Helmet>
         <title>Daftar User - LapasPanic</title>
       </Helmet>
-      <ToastContainer />
       <div className="p-4 bg-white bg-opacity-50 shadow-xl border rounded-lg">
         <h1 className="text-2xl font-bold mb-2">Daftar Pengguna</h1>
-        <div className="rounded-lg">
+        <div className="rounded-lg -z-50">
           <MaterialReactTable table={table} />
         </div>
       </div>

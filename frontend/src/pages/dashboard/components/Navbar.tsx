@@ -14,7 +14,7 @@ const Navbar = ({ user, handleLogout }: Props) => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   return (
-    <div className="fixed top-0 h-16 bg-primary-main w-full flex justify-end items-center text-primary-contrast px-4 gap-4">
+    <div className="fixed top-0 h-16 bg-primary-main w-full flex justify-end items-center text-primary-contrast px-4 gap-4 z-20">
       {user.name && (
         <div className="flex gap-1 border px-2 py-1 rounded-md justify-center items-center">
           <PersonIcon />

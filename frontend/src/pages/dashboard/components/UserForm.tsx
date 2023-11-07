@@ -28,7 +28,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
       roleId: 5,
       password: "",
       confirm_password: "",
-      approved: true,
+      approved: false,
     }
   );
   const [roles, setRoles] = useState<Role[]>([]);

@@ -17,7 +17,7 @@ interface Props {
 const Sidebar = ({ currentPath }: Props) => {
   const [openCollapse, setOpenCollapse] = React.useState<boolean>(false);
   return (
-    <div className="fixed left-0 top-0 w-60 z-10 flex flex-col bg-primary-main h-screen text-primary-contrast px-2">
+    <div className="fixed left-0 top-0 w-60 z-30 flex flex-col bg-primary-main h-screen text-primary-contrast px-2">
       <div className="flex flex-col">
         <Link to={"/dashboard"} className="text-2xl text-start pl-2 py-4 block">
           LapasPanic

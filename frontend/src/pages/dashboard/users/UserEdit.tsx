@@ -76,15 +76,13 @@ const UserEdit = () => {
     setIsLoading(true);
     api
       .put(`/users/${userId}`, user)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         navigate("/dashboard/users", {
-          replace: true,
           state: { saveUser: true },
         });
       })
-      .catch((err) => console.log(err));
-    setIsLoading(false);
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
   };
 
   const deleteUserHandler = () => {
@@ -214,15 +212,14 @@ const UserEdit = () => {
           </div>
           <div className="flex flex-row gap-4">
             <div className="flex flex-col w-full gap-1 font-bold">
-              <label htmlFor="NIP">NIP*</label>
+              <label htmlFor="NIP">NIP</label>
               <TextField
-                required
                 type="number"
                 name="NIP"
                 id="NIP"
                 variant="outlined"
                 size="small"
-                value={user?.NIP}
+                value={user?.NIP ?? ""}
                 onChange={(e) =>
                   setUser((prev) => ({ ...prev, NIP: e.target.value }))
                 }
@@ -254,9 +251,8 @@ const UserEdit = () => {
           </div>
           <div className="flex flex-row gap-4">
             <div className="flex flex-col w-full gap-1 font-bold">
-              <label>Jabatan*</label>
+              <label>Jabatan</label>
               <Select
-                required
                 value={user?.jabatan}
                 size="small"
                 onChange={(e: SelectChangeEvent) =>
