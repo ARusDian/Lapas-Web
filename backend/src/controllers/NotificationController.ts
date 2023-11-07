@@ -1,6 +1,25 @@
 import { Request, Response, NextFunction } from "express";
-import { getPushButtonLogService, postDeviceTokenService, postNotificationService } from "../services";
+import { getDeviceTokensService, getPushButtonLogService, postDeviceTokenService, postNotificationService } from "../services";
 import { DataDetailResponse, SuccessResponse, UserAuthInfoRequest } from "../models";
+
+export const getDeviceTokens = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const deviceTokens = await getDeviceTokensService();
+        const response = new SuccessResponse(
+            200,
+            "OK",
+            new DataDetailResponse(
+                "deviceTokens",
+                deviceTokens
+            )
+        );
+
+        res.status(response.code).json(response);
+    }
+    catch (error) {
+        next(error);
+    }
+}
 
 export const PostDeviceToken = async (req: Request, res: Response, next: NextFunction) => {
     try {

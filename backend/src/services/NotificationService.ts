@@ -31,6 +31,37 @@ export const postDeviceTokenService = async (req: UserAuthInfoRequest): Promise<
     return "Device token saved successfully";
 }
 
+export const getDeviceTokensService = async () => { 
+
+    return await prisma.deviceToken.findMany({
+        select: {
+            id: true,
+            deviceToken: true,
+            userId: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                }
+            }
+        }
+    }).catch((error) => {
+        if (error instanceof Error) {
+            throw new ErrorResponse(
+                400,
+                "Bad Request",
+                new ErrorDetails(
+                    "GetDeviceTokensError",
+                    "GetDeviceTokensError",
+                    error.message
+                )
+            );
+        }
+    });
+}
+
 export const postNotificationService = async (req: UserAuthInfoRequest) => {
     const { type, userId } = req.body;
 
