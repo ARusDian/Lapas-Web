@@ -24,7 +24,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
       jabatan: "",
       roleId: 2,
       password: "",
-      confirmPassword: "",
+      confirm_password: "",
       approved: true,
     }
   );
@@ -57,7 +57,6 @@ const UserForm = ({ onSubmit, data }: Props) => {
     });
   }, []);
 
-  console.log(form);
   return (
     <form
       onSubmit={(e) => {
@@ -188,9 +187,9 @@ const UserForm = ({ onSubmit, data }: Props) => {
             type="password"
             variant="outlined"
             size="small"
-            name="confirmPassword"
+            name="confirm_password"
             onChange={formSetHandler}
-            error={form.password !== form.confirmPassword}
+            error={form.password !== form.confirm_password}
             inputProps={{
               minLength: 8,
             }}
@@ -202,7 +201,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
         variant="contained"
         color="primary"
         size="large"
-        disabled={form.password !== form.confirmPassword || isLoading}
+        disabled={form.password !== form.confirm_password || isLoading}
       >
         Tambah
       </Button>
