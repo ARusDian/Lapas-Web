@@ -6,7 +6,7 @@ import admin from "firebase-admin";
 
 const prisma = new PrismaClient();
 
-export const postDeviceTokenService = async (req: UserAuthInfoRequest): Promise<string> => {
+export const postDeviceTokenService = async (req: UserAuthInfoRequest): Promise<DeviceTokenModel> => {
     const { token } = DeviceTokenValidation(req.body);
 
     if (req.userId === undefined) {
@@ -28,7 +28,7 @@ export const postDeviceTokenService = async (req: UserAuthInfoRequest): Promise<
         }
     });
 
-    return "Device token saved successfully";
+    return deviceToken;
 }
 
 export const getDeviceTokensService = async () => { 
