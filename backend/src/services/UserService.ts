@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { Request } from "express";
 import { UserInputValidation, getRoleByNameService, numberValidation } from ".";
-import { ErrorResponse, ErrorDetails, UserModel } from "../models";
+import { ErrorResponse, ErrorDetails, UserModel, UserAuthInfoRequest } from "../models";
 import { UserRecord, getAuth } from "firebase-admin/auth";
 
 const prisma = new PrismaClient();
@@ -294,6 +294,109 @@ export const updateUserService = async (id: number | string, req: Request) => {
 		);
 	});
 };
+
+export const updateUserProfileService = async (id: number | string, req: UserAuthInfoRequest) => {
+	const user = await getUserByIdService(id);
+
+	if (user.id !== req.userId) {
+		throw new ErrorResponse(
+			403,
+			"Forbidden",
+			new ErrorDetails(
+				"updateUserProfile",
+				"Update Error",
+				"User not allowed to update this profile"
+			)
+		);
+	}
+
+	if (!user.uid) {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				"updateUser",
+				"Update Error",
+				"User not approved yet, please contact admin"
+			)
+		);
+	}
+
+	const {
+		email,
+		name,
+		NIP,
+		gender,
+		jabatan,
+		password,
+	} = await UserInputValidation(req.body, "updateUser", true);
+	
+	if (password) {
+		getAuth().updateUser(user.uid, {
+			email: email,
+			password: password,
+		}).catch((error) => { 
+			throw new ErrorResponse(
+				500,
+				"Firebase Error",
+				new ErrorDetails(
+					"updateUser",
+					"Update Error",
+					error
+				)
+			);
+		});
+	} else {
+		getAuth().updateUser(user.uid, {
+			email: email,
+		}).catch((error) => {
+			throw new ErrorResponse(
+				500,
+				"Firebase Error",
+				new ErrorDetails(
+					"updateUser",
+					"Update Error",
+					error
+				)
+			);
+		});
+	}
+	return prisma.user.update({
+		where: {
+			id: user.id
+		},
+		data: {
+			name: name,
+			email: email,
+			password: password,
+			NIP: NIP,
+			gender: gender,
+			jabatan: jabatan,
+		}
+	}).catch((error) => {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					error
+				)
+			);
+		}
+		throw new ErrorResponse(
+			500,
+			"Internal Server Error",
+			new ErrorDetails(
+				"updateUser",
+				"Update Error",
+				error
+			)
+		);
+	});
+}
 
 export const updateApprovedUserService = async (id: number | string, req: Request) => {
 	const user = await getUserByIdService(id);

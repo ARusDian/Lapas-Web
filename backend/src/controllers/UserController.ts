@@ -9,6 +9,7 @@ import {
 	setDisableUserService,
 	approveUserService,
 	updateApprovedUserService,
+	updateUserProfileService,
 } from "../services";
 import { Request, Response, NextFunction } from "express";
 
@@ -88,6 +89,25 @@ export const updateUser = async (req: Request, res: Response, next: NextFunction
 		next(error);
 	}
 };
+
+export const updateUserProfile = async (req: Request, res: Response, next: NextFunction) => {
+	try {
+		const updatedUser = await updateUserProfileService(Number(req.params.id), req) as UserModel;
+		const response = new SuccessResponse<UserModel>(
+			200,
+			"OK",
+			new DataDetailResponse<UserModel>(
+				"users",
+				updatedUser
+			)
+		);
+		res.status(response.code).json(response);
+		return;
+	}
+	catch (error) {
+		next(error);
+	}
+}
 
 export const updateApprovedUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
