@@ -28,8 +28,8 @@ const UserList = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
-    setIsLoading(false);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
@@ -47,6 +47,17 @@ const UserList = () => {
         });
       } else if (location.state.approveUser) {
         toast.info(`User berhasil diapprove!`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
+      } else if (location.state.saveUser) {
+        toast.info(`User berhasil disimpan!`, {
           position: "top-center",
           autoClose: 5000,
           hideProgressBar: false,

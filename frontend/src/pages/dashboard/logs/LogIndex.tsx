@@ -44,14 +44,17 @@ const LogIndex = () => {
       {
         accessorKey: "id",
         header: "ID",
+        size:10
       },
       {
         accessorKey: "type",
         header: "Jenis",
+        size: 35
       },
       {
         accessorKey: "createdAt",
         header: "Tanggal Kejadian",
+        size: 35,
         Cell: ({ row }) => (
           <Box>
             {moment(row.original.createdAt).format("DD MMMM YYYY, HH:mm:ss")}
@@ -61,6 +64,7 @@ const LogIndex = () => {
       {
         accessorKey: "user",
         header: "Ditekan oleh",
+        size: 20,
         Cell: ({ row }) => (
           <Box>
             <Link

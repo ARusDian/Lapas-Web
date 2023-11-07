@@ -14,6 +14,7 @@ import DashboardLoading from "../components/DashboardLoading";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DeleteDialog from "../components/DeleteDialog";
 import { ClipLoader } from "react-spinners";
+import { ToastContainer, toast } from "react-toastify";
 
 const UserEdit = () => {
   const { userId } = useParams();
@@ -30,6 +31,7 @@ const UserEdit = () => {
     gender: "L",
     roleId: 5,
   });
+  console.log(user);
   const [roles, setRoles] = useState<Role[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -74,7 +76,16 @@ const UserEdit = () => {
   const saveUserHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log(user);
+    api
+      .put(`/users/${userId}`, user)
+      .then((res) => {
+        console.log(res);
+        navigate("/dashboard/users", {
+          replace: true,
+          state: { saveUser: true },
+        });
+      })
+      .catch((err) => console.log(err));
     setIsLoading(false);
   };
 
@@ -100,6 +111,16 @@ const UserEdit = () => {
       .put(`/users/${userId}/disable`)
       .then(() => {
         fetchUser();
+        toast.info(`User berhasil di-${user.disabled ? "enable" : "disable"}!`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       })
       .then((err) => console.log(err))
       .finally(() => setIsLoading(false));
@@ -114,6 +135,7 @@ const UserEdit = () => {
       <Helmet>
         <title>Detail User - LapasPanic</title>
       </Helmet>
+      <ToastContainer/>
       <div className="h-[calc(100vh-100px)] border bg-white bg-opacity-50 shadow-lg rounded-lg p-4">
         <div className="flex flex-row justify-between w-full">
           <Link
@@ -197,15 +219,17 @@ const UserEdit = () => {
               <label htmlFor="NIP">NIP*</label>
               <TextField
                 required
-                type="text"
+                type="number"
                 name="NIP"
                 id="NIP"
                 variant="outlined"
                 size="small"
                 value={user?.NIP}
+                onChange={(e) =>
+                  setUser((prev) => ({ ...prev, NIP: e.target.value }))
+                }
                 inputProps={{
                   minLength: 18,
-                  readOnly: true,
                 }}
               />
             </div>
@@ -322,7 +346,7 @@ const UserEdit = () => {
               >
                 Hapus
               </Button>
-              <div className={`${!isLoading && "hidden"}`}>
+              <div className={`${!isLoading && "hidden"} flex`}>
                 <ClipLoader color="#1976d2" />
               </div>
             </div>
