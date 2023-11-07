@@ -61,6 +61,7 @@ export const getRolebyIdwithUsers = async (req: Request, res: Response, next: Ne
 			"OK",
 			new DataDetailResponse<RoleModel[]>(
 				"roles",
+				// @ts-ignore
 				role
 			)
 		);

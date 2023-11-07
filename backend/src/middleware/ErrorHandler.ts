@@ -36,13 +36,10 @@ export const unknownEndpoint = (_request: Request, _response: Response, next: Ne
 
 export const PrismaErrorHandler = (err: Error | typeof ErrorResponse, _request: Request, _response: Response, next: NextFunction) => {
 	// @ts-ignore
-	console.log("PrismaErrorHandler: ", err.errorInfo, instanceOfType<FirebaseAuthError>(err));
+	console.log("PrismaErrorHandler: ", err);
 	if (err instanceof Error && err.name === "PrismaClientKnownRequestError") {
 		throw new ErrorResponse(
 			400,
-
-
-			
 			"Bad Request",
 			new ErrorDetails(
 				"PrismaClientKnownRequestError",

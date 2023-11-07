@@ -34,7 +34,7 @@ export const getUsersService = async (req: Request) => {
 	});
 };
 
-export const getUserByIdService = async (id: number | string): Promise<UserModel> => {
+export const getUserByIdService = async (id: number | string) => {
 	id = numberValidation(id, "getUser", "User id");
 
 	const user = await prisma.user.findUnique({
@@ -65,10 +65,10 @@ export const getUserByIdService = async (id: number | string): Promise<UserModel
 			)
 		);
 	}
-	return user;
+	return user as UserModel;
 };
 
-export const getUserByUidService = async (uid: string | string): Promise<UserModel> => {
+export const getUserByUidService = async (uid: string | string) => {
 
 	const user = await prisma.user.findUnique({
 		where: {
@@ -97,7 +97,7 @@ export const getUserByUidService = async (uid: string | string): Promise<UserMod
 			)
 		);
 	}
-	return user;
+	return user as UserModel;
 };
 
 export const getUserByEmailService = async (email: string) => {
@@ -207,7 +207,6 @@ export const createRegistrationUserService = async (req: Request) => {
 			password: password!,
 			uid: null,
 			disabled: false,
-			NIP: "",
 			gender: "L",
 			jabatan: "",
 			approved: false,
@@ -226,7 +225,7 @@ export const createRegistrationUserService = async (req: Request) => {
 				new ErrorDetails(
 					"PrismaClientKnownRequestError",
 					"Error Saving to Database",
-					error.meta.cause
+					error.message
 				)
 			);
 		}

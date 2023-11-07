@@ -15,7 +15,7 @@ export interface BaseUserModel extends CustomUserRecord {
 
     // User
     name: string;
-    NIP: string;
+    NIP: string | null;
     gender: "L" | "P";
     jabatan: string;
     approved: boolean;
