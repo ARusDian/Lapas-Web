@@ -131,6 +131,7 @@ export const createUserService = async (req: Request) => {
 	return getAuth().createUser({
 		email: email,
 		password: password,
+		emailVerified: true,
 		disabled: false
 	}).then((UserRecord) => {
 		console.log(UserRecord)
@@ -191,7 +192,7 @@ export const createUserService = async (req: Request) => {
 };
 
 export const createRegistrationUserService = async (req: Request) => {
-	
+
 	const {
 		name,
 		email,
@@ -330,12 +331,12 @@ export const updateUserProfileService = async (id: number | string, req: UserAut
 		jabatan,
 		password,
 	} = await UserInputValidation(req.body, "updateUser", true);
-	
+
 	if (password) {
 		getAuth().updateUser(user.uid, {
 			email: email,
 			password: password,
-		}).catch((error) => { 
+		}).catch((error) => {
 			throw new ErrorResponse(
 				500,
 				"Firebase Error",
@@ -541,7 +542,8 @@ export const approveUserService = async (id: number | string) => {
 	return getAuth().createUser({
 		email: user.email,
 		password: user.password,
-		disabled: false
+		disabled: false,
+		emailVerified: true
 	}).then((UserRecord) => {
 		return prisma.user.update({
 			where: {
