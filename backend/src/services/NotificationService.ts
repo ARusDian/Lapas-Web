@@ -6,7 +6,7 @@ import admin from "firebase-admin";
 
 const prisma = new PrismaClient();
 
-export const postDeviceTokenService = async (req: UserAuthInfoRequest): Promise<string> => {
+export const postDeviceTokenService = async (req: UserAuthInfoRequest) => {
     const { token } = DeviceTokenValidation(req.body);
 
     if (req.userId === undefined) {
@@ -20,15 +20,100 @@ export const postDeviceTokenService = async (req: UserAuthInfoRequest): Promise<
             )
         );
     }
-    
-    const deviceToken = prisma.deviceToken.create({
+
+    const userDeviceToken = await getDeviceTokenByUserIdService(req.userId);
+    if (userDeviceToken) {
+        await prisma.deviceToken.deleteMany({
+            where: {
+                userId: req.userId
+            }
+        });
+    }
+
+    const deviceToken = await prisma.deviceToken.create({
         data: {
             deviceToken: token,
             userId: req.userId
         }
+    }).catch((error) => {
+        if (error instanceof Error) {
+            throw new ErrorResponse(
+                400,
+                "Bad Request",
+                new ErrorDetails(
+                    "DeviceTokenErrorSave",
+                    "DeviceTokenError",
+                    error.message
+                )
+            );
+        }
     });
 
-    return "Device token saved successfully";
+    if (!deviceToken) {
+        throw new ErrorResponse(
+            500,
+            "Internal Server Error",
+            new ErrorDetails(
+                "DeviceTokenErrorSave",
+                "DeviceTokenError",
+                "Failed to save device token"
+            )
+        );
+    }
+
+
+    return deviceToken;
+}
+
+export const getDeviceTokenByUserIdService = async (userId: number) => {
+    return await prisma.deviceToken.findMany({
+        where: {
+            userId: userId
+        }
+    }).catch((error) => {
+        if (error instanceof Error) {
+            throw new ErrorResponse(
+                400,
+                "Bad Request",
+                new ErrorDetails(
+                    "GetDeviceTokenByUserIdError",
+                    "GetDeviceTokenByUserIdError",
+                    error.message
+                )
+            );
+        }
+    });
+}
+
+export const getDeviceTokensService = async () => { 
+
+    return await prisma.deviceToken.findMany({
+        select: {
+            id: true,
+            deviceToken: true,
+            userId: true,
+            createdAt: true,
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                }
+            }
+        }
+    }).catch((error) => {
+        if (error instanceof Error) {
+            throw new ErrorResponse(
+                400,
+                "Bad Request",
+                new ErrorDetails(
+                    "GetDeviceTokensError",
+                    "GetDeviceTokensError",
+                    error.message
+                )
+            );
+        }
+    });
 }
 
 export const postNotificationService = async (req: UserAuthInfoRequest) => {

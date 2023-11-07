@@ -1,7 +1,7 @@
 export interface DeviceTokenModel {
-    id: string;
-    token: string;
-    userId: string;
+    id: number;
+    deviceToken: string;
+    userId: number;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt: Date | null;
 }
