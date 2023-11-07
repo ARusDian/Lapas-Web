@@ -8,16 +8,34 @@ import { instanceOfType } from "../utils/helper";
 export const registerService = async (req: Request) => {
 	const { name, email, password, confirmPassword } = req.body;
 	if (!name || !email || !password || !confirmPassword) {
+		let empty = "";
+		if (!name) empty += "name, ";
+		if (!email) empty += "email, ";
+		if (!password) empty += "password, ";
+		if (!confirmPassword) empty += "confirmPassword, ";
 		throw new ErrorResponse(
 			400,
 			"Bad Request",
 			new ErrorDetails(
 				"RegisterError",
 				"Validation Error",
-				"All fields are required"
+				"All fields are required :" + empty.slice(0, -2)
 			)
 		);
 	}
+
+	if (password.length < 8) {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				"RegisterError",
+				"Validation Error",
+				"Password must be at least 6 characters"
+			)
+		);
+	}
+
 	if (password !== confirmPassword) {
 		throw new ErrorResponse(
 			400,
