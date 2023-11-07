@@ -46,7 +46,6 @@ const getRole = async (req: UserAuthInfoRequest) => {
 	}
 	if (req.userId) {
 		const user = await getUserByIdService(req.userId);
-		console.log(user);
 		if (user) {
 			return user.roleId;
 		}
