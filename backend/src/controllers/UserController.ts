@@ -149,7 +149,7 @@ export const deleteUser = async (req: Request, res: Response, next: NextFunction
 
 export const approveUser = async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		const user = await approveUserService(Number(req.params.id)) as UserModel;
+		const user = await approveUserService(Number(req.params.id)) as unknown as UserModel;
 		const response = new SuccessResponse<UserModel>(
 			200,
 			"OK",

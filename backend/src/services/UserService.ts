@@ -48,6 +48,7 @@ export const getUserByIdService = async (id: number | string) => {
 			email: true,
 			NIP: true,
 			gender: true,
+			password: true,
 			jabatan: true,
 			approved: true,
 			disabled: true,
@@ -539,41 +540,28 @@ export const deleteApprovedUserService = async (id: number | string) => {
 export const approveUserService = async (id: number | string) => {
 	const user = await getUserByIdService(id);
 
-	return getAuth().createUser({
-		email: user.email,
-		password: user.password,
-		disabled: false,
-		emailVerified: true
-	}).then((UserRecord) => {
-		return prisma.user.update({
-			where: {
-				id: user.id
-			},
-			data: {
-				uid: UserRecord.uid,
-				approved: true,
-				password: "",
+	console.log(user.password);
+
+	return await deleteUserService(user.id).then(() => {
+		return createUserService(
+			// @ts-ignore
+			{
+				body: {
+					...user,
+					approved: true,
+					NIP: null,
+					jabatan: "",
+					password: user.password
+				}
 			}
-		});
+		);
 	}).catch((error) => {
-		if (error instanceof Prisma.PrismaClientKnownRequestError) {
-			error = error as Prisma.PrismaClientKnownRequestError;
-			throw new ErrorResponse(
-				400,
-				"Bad Request",
-				new ErrorDetails(
-					"PrismaClientKnownRequestError",
-					"Error Saving to Database",
-					error.meta.cause
-				)
-			);
-		}
 		throw new ErrorResponse(
 			500,
 			"Internal Server Error",
 			new ErrorDetails(
-				"createApprovedUser",
-				"Create Error",
+				"approveUserService",
+				"Approve Error",
 				error
 			)
 		);

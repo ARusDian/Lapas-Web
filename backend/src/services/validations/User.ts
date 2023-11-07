@@ -3,7 +3,7 @@ import { getUserByEmailService } from "../UserService";
 
 export const UserInputValidation = async (newUser: BaseUserModel, errorName: string, isUpdate: boolean = false) => {
 	const { name, email, password, roleId, NIP, gender, jabatan, approved } = newUser;
-	if (!name || !email || !NIP || !gender || !jabatan ) {
+	if (!name || !email || NIP === undefined || !gender || jabatan === undefined ) {
 		let empty = "";
 		if (!name) empty += "name, ";
 		if (!email) empty += "email, ";
