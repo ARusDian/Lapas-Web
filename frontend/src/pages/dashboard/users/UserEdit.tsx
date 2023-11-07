@@ -31,7 +31,6 @@ const UserEdit = () => {
     gender: "L",
     roleId: 5,
   });
-  console.log(user);
   const [roles, setRoles] = useState<Role[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -60,8 +59,7 @@ const UserEdit = () => {
     setIsLoading(true);
     api
       .post(`/users/${userId}/approve`)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         navigate("/dashboard/users", {
           replace: true,
           state: {
