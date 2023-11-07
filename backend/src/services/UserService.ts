@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { Request } from "express";
-import { UserInputValidation, numberValidation } from ".";
+import { UserInputValidation, getRoleByNameService, numberValidation } from ".";
 import { ErrorResponse, ErrorDetails, UserModel } from "../models";
 import { UserRecord, getAuth } from "firebase-admin/auth";
 
@@ -191,16 +191,68 @@ export const createUserService = async (req: Request) => {
 };
 
 export const createRegistrationUserService = async (req: Request) => {
+	
 	const {
-		email,
 		name,
-		NIP,
-		gender,
-		jabatan,
+		email,
 		password,
-		roleId
-	} = await UserInputValidation(req.body, "createUser");
+		confirmPassword,
+	} = req.body;
 
+	if (!name || !email || !password || !confirmPassword) {
+		let empty = "";
+		if (!name) empty += "name, ";
+		if (!email) empty += "email, ";
+		if (!password) empty += "password, ";
+		if (!confirmPassword) empty += "confirmPassword, ";
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				"createUser",
+				"Validation Error",
+				"All fields are required :" + empty.slice(0, -2)
+			)
+		);
+	}
+
+	if (!email.includes("@")) {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				"createUser",
+				"Validation Error",
+				"Invalid email"
+			)
+		);
+	}
+
+	if (password.length < 8) {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				"createUser",
+				"Validation Error",
+				"Password must be at least 8 characters"
+			)
+		);
+	}
+
+	if (password !== confirmPassword) {
+		throw new ErrorResponse(
+			400,
+			"Bad Request",
+			new ErrorDetails(
+				"createUser",
+				"Validation Error",
+				"Password and Confirm Password must be same"
+			)
+		);
+	}
+
+	const userRole = await getRoleByNameService("user");
 
 	return await prisma.user.create({
 		data: {
@@ -209,17 +261,29 @@ export const createRegistrationUserService = async (req: Request) => {
 			password: password!,
 			uid: null,
 			disabled: false,
-			NIP: NIP,
-			gender: gender,
-			jabatan: jabatan,
+			NIP: "",
+			gender: "L",
+			jabatan: "",
 			approved: false,
 			role: {
 				connect: {
-					id: roleId || 2
+					id: userRole?.id
 				}
 			}
 		}
 	}).catch((error) => {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			error = error as Prisma.PrismaClientKnownRequestError;
+			throw new ErrorResponse(
+				400,
+				"Bad Request",
+				new ErrorDetails(
+					"PrismaClientKnownRequestError",
+					"Error Saving to Database",
+					error.meta.cause
+				)
+			);
+		}
 		throw new ErrorResponse(
 			500,
 			"Internal Server Error",
