@@ -1,11 +1,13 @@
-interface PushButtonLog {
+interface LogType {
   id: number;
-  buttonId: number;
   userId: number;
-  user: string;
+  user: {
+    id: number,
+    name: string,
+    email: string,
+  };
   type: "KEBAKARAN" | "BENCANA" | "RUSUH";
-  created_at: string;
-  updated_at: string;
+  createdAt: string;
 }
 
-export type { PushButtonLog };
+export type { LogType };

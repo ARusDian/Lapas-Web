@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserCredential, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { UserCredential, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../lib/firebase';
 import { LoginProps, Role } from '../types/Auth.type';
 import { API_URL } from '../lib/env';
@@ -28,8 +28,8 @@ const getAllRoles = async () => {
 const login = async (data: LoginProps) => {
   try {
     const response: UserCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-    console.log(response);
     localStorage.setItem("accessToken", response.user.accessToken);
+    localStorage.setItem("refreshToken", response.user.refreshToken);
     return response;
   } catch (error) {
     throw error;
@@ -68,6 +68,7 @@ const getUsers = async () => {
 const logout = async () => {
   try {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
   } catch (error) {
     throw error;
   }
