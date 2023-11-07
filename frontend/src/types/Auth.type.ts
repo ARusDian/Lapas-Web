@@ -16,8 +16,8 @@ interface RegisterProps {
 };
 
 interface BaseUserModel {
-  name: string,
-  email: string,
+  name: string | null,
+  email: string | null,
 }
 
 interface UserModel extends BaseUserModel{

@@ -44,21 +44,20 @@ const Login = () => {
       <Helmet>
         <title>Login - LapasPanic</title>
       </Helmet>
-      <div className="flex justify-between items-center h-[100vh] gap-8">
-        <div className="h-full w-full">
+      <div className="h-[100vh] gap-8 flex">
+        <div className="fixed top-[50%] left-[50%] -z-10 opacity-50 translate-x-[-50%] translate-y-[-50%]">
           <img
-            src="/assets/lapas-bg-main.png"
-            className="w-full h-full bg-cover brightness-50"
+            src="/assets/lapas-logo.png"
+            className="brightness-50"
           />
         </div>
-        <div className="w-[800px] h-96 mx-auto p-4 mr-8">
-          <h1 className="text-3xl font-bold text-center">LapasPanic</h1>
+        <div className="w-[600px] h-[340px] mx-auto p-4 self-center bg-white bg-opacity-75 shadow-md rounded-lg">
           <form
             onSubmit={handleSubmit}
             className="flex flex-col h-full gap-4 mt-4"
           >
             <div className="flex flex-col gap-1">
-              <label htmlFor="email">Email*</label>
+              <label htmlFor="email">Email<span className="text-red-500">*</span></label>
               <TextField
                 required
                 id="email"
@@ -72,7 +71,7 @@ const Login = () => {
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="password">Password*</label>
+              <label htmlFor="password">Password<span className="text-red-500">*</span></label>
               <TextField
                 required
                 id="password"
@@ -96,7 +95,7 @@ const Login = () => {
               Login
             </Button>
             {error && (
-              <div className="text-center text-red-600 text-sm">{error}</div>
+              <div className="text-center text-red-600 font-bold text-lg">{error}</div>
             )}
           </form>
         </div>

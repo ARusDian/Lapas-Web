@@ -28,13 +28,13 @@ const UserEdit = () => {
     approved: false,
     jabatan: "",
     gender: "L",
-    roleId: 0,
+    roleId: 5,
   });
   const [roles, setRoles] = useState<Role[]>([]);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchUser = async () => {
     api
       .get(`/users/${userId}`)
       .then((res) => {
@@ -43,6 +43,10 @@ const UserEdit = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  useEffect(() => {
+    fetchUser();
 
     getAllRoles().then((res) => {
       setRoles(res);
@@ -53,7 +57,7 @@ const UserEdit = () => {
   const approveUserHandler = () => {
     setIsLoading(true);
     api
-      .put(`/users/${userId}/approve`)
+      .post(`/users/${userId}/approve`)
       .then((res) => {
         console.log(res);
         navigate("/dashboard/users", {
@@ -76,14 +80,29 @@ const UserEdit = () => {
 
   const deleteUserHandler = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      navigate("/dashboard/users", {
-        replace: true,
-        state: {
-          deleteUser: true,
-        },
-      });
-    }, 1500);
+    api
+      .delete(`/users/${userId}`)
+      .then(() => {
+        navigate("/dashboard/users", {
+          replace: true,
+          state: {
+            deleteUser: true,
+          },
+        });
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setIsLoading(false));
+  };
+
+  const disableUserHandler = () => {
+    setIsLoading(true);
+    api
+      .put(`/users/${userId}/disable`)
+      .then(() => {
+        fetchUser();
+      })
+      .then((err) => console.log(err))
+      .finally(() => setIsLoading(false));
   };
 
   if (isLoading && !user.name) {
@@ -124,6 +143,7 @@ const UserEdit = () => {
               size="large"
               className="w-full"
               disabled={isLoading}
+              onClick={disableUserHandler}
             >
               {user.disabled ? "Enable" : "Disable"}
             </Button>

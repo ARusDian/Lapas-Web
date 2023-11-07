@@ -7,10 +7,11 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { RegisterProps, Role } from "../../../types/Auth.type";
-import { getAllRoles } from "../../../utils/api";
+import { api, getAllRoles } from "../../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
-  onSubmit: (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>, data: RegisterProps) => void;
   data?: RegisterProps;
 }
 
@@ -22,7 +23,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
       NIP: "",
       gender: "L",
       jabatan: "",
-      roleId: 2,
+      roleId: 5,
       password: "",
       confirm_password: "",
       approved: true,
@@ -30,6 +31,24 @@ const UserForm = ({ onSubmit, data }: Props) => {
   );
   const [roles, setRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const formSubmitHandler = (
+    e: React.FormEvent<HTMLFormElement>,
+    data: RegisterProps
+  ) => {
+    e.preventDefault();
+    api.post('/users', data, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    }).then(res => console.log(res))
+    .catch(err => console.log(err))
+    .finally(() => {
+      navigate('/dashboard/users');
+    })
+
+  };
 
   const jabatanSelectHandler = (event: SelectChangeEvent) => {
     setForm((prev) => ({
@@ -60,8 +79,8 @@ const UserForm = ({ onSubmit, data }: Props) => {
   return (
     <form
       onSubmit={(e) => {
-        onSubmit(e, form);
         setIsLoading(true);
+        onSubmit ? onSubmit(e, form) : formSubmitHandler(e, form);
       }}
       className="flex flex-col gap-4"
     >
