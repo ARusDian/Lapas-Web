@@ -50,8 +50,7 @@ const UserForm = ({ onSubmit, data }: Props) => {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         navigate("/dashboard/users");
       })
       .catch((err) => {

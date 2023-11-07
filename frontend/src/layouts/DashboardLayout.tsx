@@ -25,7 +25,6 @@ const DashboardLayout = () => {
   useEffect(() => {
     getAuthData()
       .then((res) => {
-        console.log(res)
         setUser({
           name: res.data.data.data.name,
           email: res.data.data.data.email,
