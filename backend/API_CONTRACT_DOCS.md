@@ -1,4 +1,4 @@
-# API Contract Documentation
+#LAPASPANIC API Contract Documentation
 ---------------
 
 ## Error Object
