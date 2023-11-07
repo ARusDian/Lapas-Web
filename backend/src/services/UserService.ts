@@ -30,6 +30,7 @@ export const getUsersService = async (req: Request) => {
 			jabatan: true,
 			approved: true,
 			disabled: true,
+			DeviceToken: true,
 		},
 	});
 };
@@ -53,6 +54,7 @@ export const getUserByIdService = async (id: number | string) => {
 			approved: true,
 			disabled: true,
 			roleId: true,
+			DeviceToken: true,
 		},
 	});
 	if (!user) {
@@ -85,6 +87,7 @@ export const getUserByUidService = async (uid: string | string) => {
 			jabatan: true,
 			approved: true,
 			disabled: true,
+			DeviceToken: true,
 		},
 	});
 	if (!user) {
