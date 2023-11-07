@@ -31,7 +31,7 @@ export const registerService = async (req: Request) => {
 			new ErrorDetails(
 				"RegisterError",
 				"Validation Error",
-				"Password must be at least 6 characters"
+				"Password must be at least 8 characters"
 			)
 		);
 	}
