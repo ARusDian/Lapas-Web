@@ -40,7 +40,7 @@ model User {
   disabled       Boolean         @default(false)
   // User
   name           String
-  NIP            String?          @unique
+  NIP            String?         @unique
   gender         Gender
   jabatan        String
   approved       Boolean         @default(false)
@@ -52,6 +52,7 @@ model User {
   // Timestamp
   createdAt      DateTime        @default(now()) @map("created_at")
   updatedAt      DateTime        @updatedAt @map("updated_at")
+  DeviceToken    DeviceToken[]
 
   @@map("users")
 }
@@ -68,7 +69,13 @@ model PushButtonLog {
 }
 
 model DeviceToken {
-  id          Int    @id @default(autoincrement())
-  userId      Int    @map("user_id")
-  deviceToken String @unique @map("device_token")
+  id          Int       @id @default(autoincrement())
+  userId      Int       @map("user_id")
+  user        User?     @relation(fields: [userId], references: [id])
+  
+  deviceToken String    @unique @map("device_token")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
+
+  @@map("device_tokens")
 }

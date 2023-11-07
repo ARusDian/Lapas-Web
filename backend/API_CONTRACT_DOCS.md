@@ -121,7 +121,7 @@ Returns an authenticated user data
     "disabled": boolean,
     // User Data
     "name": string,
-    "NIP": string,
+    "NIP": string | null,
     "gender": "L" | "P",
     "jabatan": string,
     "approved": boolean,
@@ -303,6 +303,48 @@ Updates a user with the specified id
 
     Content-Type: application/json  
     authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 200  
+    **Content:**
+
+```json
+{
+    "code" : 200,
+    "status" : "OK",
+    "data" : {
+        "name": "user",
+        "data" : {<user_object>}
+    },
+    "meta" : {
+        "timestamp" : datetime,
+    }
+}
+```
+
+## **PUT** /api/users/:id/profile
+
+Updates a user profile with the specified id and the user must same with the user id in the token
+
+-   **URL Params**  
+    Required: id = [integer]
+-   **DATA PARAMS**
+     ```json
+    {
+        "email": string,
+        "password": string,
+        "name": string,
+        "gender": "L" | "P",
+        "NIP": string,
+        "jabatan": string,
+        "approved": boolean,
+        "roleId": integer // Foreign Key
+    }
+    ```
+-   **Headers**
+    
+        Content-Type: application/json  
+        authorization: bearer [token]
 
 -   **Success Response:**
 -   **Code:** 200  
@@ -660,3 +702,107 @@ Deletes a role with the specified id
     }
 }
 ```
+
+# DeviceToken (FCM)
+
+- DeviceToken Object
+
+```json
+{
+    "id": integer,
+    "userId": integer, // Foreign Key
+    "token": string,
+    "user" :{<user_object>},
+    "createdAt": string, // Hidden
+    "updatedAt": string // Hidden
+}
+```
+
+## **GET** /api/deviceToken
+
+Returns all device token in the database
+
+-   **URL Params**  
+    None
+-   **Data Params**
+    None
+-   **Headers**
+    
+        Content-Type: application/json  
+        authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 200  
+    **Content:**
+
+```json
+{
+    "code": 200,
+    "status": "OK",
+    "data": {
+        "name": "deviceTokens",
+        "data": {
+            {<deviceToken_object>},
+            {<deviceToken_object>},
+            {<deviceToken_object>}
+        }
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+
+## **POST** /api/deviceToken
+
+Save user device token for push notification
+
+-   **URL Params**  
+    None
+-   **Data Params**
+    ```json
+    {
+        "token": string
+    }
+    ```
+-   **Headers**
+
+    Content-Type: application/json  
+    authorization: bearer [token]
+
+-   **Success Response:**
+-   **Code:** 201  
+    **Content:**
+
+```json
+{
+    "code": 201,
+    "status": "Created",
+    "data": {
+        "message" : "Device token saved successfully"
+    },
+    "meta": {
+        "timestamp": datetime
+    }
+}
+```
+
+
+# PushButtonNotification
+
+
+-   Notification Object
+
+```json
+{
+    "id": integer,
+    "userId": integer, // Foreign Key
+    "type": "KEBAKARAN" | "BENCANA" | "RUSUH" ,
+    "user" :{<user_object>},
+    "createdAt": string, // Hidden
+    "updatedAt": string // Hidden
+}
+```
+
+
+
