@@ -89,3 +89,27 @@ export const postNotificationService = async (req: UserAuthInfoRequest) => {
         tokens: registrationTokens
     }
 }
+
+export const getPushButtonLogService = async (req: UserAuthInfoRequest) => {
+
+    return await prisma.pushButtonLog.findMany({
+        select: {
+            id: true,
+            type: true,
+            userId: true,
+            createdAt: true
+        }
+    }).catch((error) => {
+        if (error instanceof Error) {
+            throw new ErrorResponse(
+                400,
+                "Bad Request",
+                new ErrorDetails(
+                    "GetPushButtonLogsError",
+                    "GetPushButtonLogsError",
+                    error.message
+                )
+            );
+        }
+    });
+}
