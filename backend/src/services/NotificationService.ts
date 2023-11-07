@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { PushButtonLogCreationModel, DeviceTokenModel, UserAuthInfoRequest, ErrorResponse, ErrorDetails } from "../models";
 import { DeviceTokenValidation } from "./validations/DeviceToken";
 import admin from "firebase-admin";
+import { getUserByIdService } from "./UserService";
 
 
 const prisma = new PrismaClient();
@@ -143,6 +144,8 @@ export const postNotificationService = async (req: UserAuthInfoRequest) => {
         );
     }
 
+    const user = await getUserByIdService(userId);
+
     const deviceTokens = await prisma.deviceToken.findMany({
         select: {
             deviceToken: true
@@ -154,7 +157,7 @@ export const postNotificationService = async (req: UserAuthInfoRequest) => {
     const payload = {
         notification: {
             title: type,
-            body: "Button pushed"
+            body: "Dilaporkan oleh :" + user.name 
         },
         tokens: registrationTokens
     }
