@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var deviceToken: String
     private lateinit var auth: FirebaseAuth
 
     private val requestNotificationPermissionLauncher =
@@ -51,17 +50,6 @@ class LoginActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // Dapatin device tokennya disini
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("LoginActivity", "Fetch DCM registration token", task.exception)
-                return@addOnCompleteListener
-            }
-
-            val token = task.result
-            deviceToken = token
-        }
-
         binding.btnLogin.setOnClickListener {
             val email = binding.inputUsername.text.toString()
             val password = binding.inputPassword.text.toString()
@@ -80,7 +68,6 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     Toast.makeText(this, "Sign-in berhasil sebagai ${user?.email}", Toast.LENGTH_SHORT).show()
-//                    postToken(deviceToken)
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
@@ -88,49 +75,6 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Log.d("Login", "${task.exception?.message}")
                     Toast.makeText(this, "${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
-    private fun postToken(deviceToken: String) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://admittedly-factual-tuna.ngrok-free.app/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val api = retrofit.create(ApiService::class.java)
-        val dataToken = TokenRequest(deviceToken)
-
-        auth.currentUser?.getIdToken(true)
-            ?.addOnCompleteListener { task ->
-                val tokenResult: GetTokenResult? = task.result
-                val token = tokenResult?.token
-                Log.d("DEVICE TOKEN", "${deviceToken}")
-
-                if (token != null) {
-                    val call: Call<TokenRequest?>? = api.sendToken(dataToken)
-                    val authorizationHeader = "Bearer $token"
-                    Log.d("AUTH HEADER", "$authorizationHeader")
-
-                    call?.request()?.newBuilder()
-                        ?.addHeader("Authorization", authorizationHeader)
-                        ?.build()
-
-                    call!!.enqueue(object : Callback<TokenRequest?> {
-                        override fun onResponse(call: Call<TokenRequest?>?, response: Response<TokenRequest?>) {
-                            if (response.isSuccessful) {
-//                                val response: TokenRequest? = response.body()
-                                Log.d("TOKEN", "Berhasil kirim tokennya: ${deviceToken}")
-                            } else {
-                                Log.d("TOKEN", "Gagal kirim tokennya ${response}")
-                            }
-                        }
-
-                        override fun onFailure(call: Call<TokenRequest?>, t: Throwable) {
-                            TODO("Not yet implemented")
-                        }
-
-                    })
                 }
             }
     }

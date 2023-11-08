@@ -22,6 +22,7 @@ import com.lapasstalkuda.panicbutton.databinding.FragmentHomeBinding
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,10 +62,11 @@ class HomeFragment : Fragment() {
 
             val token = task.result
             deviceToken = token
+
+            postToken(deviceToken)
         }
 
         binding.btnKebakaran.setOnClickListener {
-            postToken(deviceToken)
             postNotification("KEBAKARAN")
         }
 
@@ -79,29 +81,79 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun postToken(deviceToken: String) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://admittedly-factual-tuna.ngrok-free.app/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val api = retrofit.create(ApiService::class.java)
-        val dataToken = TokenRequest(deviceToken)
-
+    private fun postNotification(type: String) {
         auth.currentUser?.getIdToken(true)
             ?.addOnCompleteListener { task ->
+                val tokenResult: GetTokenResult? = task.result
+                val token = tokenResult?.token
+
+                if (token != null) {
+                    val loggingInterceptor =
+                        HttpLoggingInterceptor()
+                            .setLevel(HttpLoggingInterceptor.Level.BODY)
+
+                    val client = OkHttpClient.Builder()
+                        .addInterceptor(loggingInterceptor)
+                        .build()
+
+                    val retrofit = Retrofit.Builder()
+                        .baseUrl("https://admittedly-factual-tuna.ngrok-free.app/api/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .client(client)
+                        .build()
+
+                    val api = retrofit.create(ApiService::class.java)
+                    val dataNotification = NotificationRequest(type)
+                    val call: Call<NotificationRequest?>? = api.notification("Bearer $token", dataNotification)
+
+                    call!!.enqueue(object : Callback<NotificationRequest?> {
+                        override fun onResponse(
+                            call: Call<NotificationRequest?>,
+                            response: Response<NotificationRequest?>
+                        ) {
+                            if (response.isSuccessful) {
+                                val response: NotificationRequest? = response.body()
+                                Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show()
+                                Log.d("NOTIFICATION", "Berhasul coi ${token} tipenya: ${type}")
+                            } else {
+                                Log.d("NOTIFICATION", "Gagal tipenya: ${type}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<NotificationRequest?>, t: Throwable) {
+                            Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show()
+                        }
+                    })
+                }
+            }
+    }
+
+    private fun postToken(deviceToken: String) {
+        auth.currentUser?.getIdToken(true)
+            ?.addOnCompleteListener { task ->
+                val loggingInterceptor =
+                    HttpLoggingInterceptor()
+                        .setLevel(HttpLoggingInterceptor.Level.BODY)
+
+                val client = OkHttpClient.Builder()
+                    .addInterceptor(loggingInterceptor)
+                    .build()
+
+                val retrofit = Retrofit.Builder()
+                    .baseUrl("https://admittedly-factual-tuna.ngrok-free.app/api/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .client(client)
+                    .build()
+
+                val api = retrofit.create(ApiService::class.java)
+                val dataToken = TokenRequest(deviceToken)
+
                 val tokenResult: GetTokenResult? = task.result
                 val token = tokenResult?.token
                 Log.d("DEVICE TOKEN", "${deviceToken}")
 
                 if (token != null) {
-                    val call: Call<TokenRequest?>? = api.sendToken(dataToken)
-                    val authorizationHeader = "Bearer $token"
-                    Log.d("AUTH HEADER", "$authorizationHeader")
-
-                    call?.request()?.newBuilder()
-                        ?.addHeader("Authorization", authorizationHeader)
-                        ?.build()
+                    val call: Call<TokenRequest?>? = api.sendToken("Bearer $token", dataToken)
 
                     call!!.enqueue(object : Callback<TokenRequest?> {
                         override fun onResponse(call: Call<TokenRequest?>?, response: Response<TokenRequest?>) {
@@ -122,65 +174,8 @@ class HomeFragment : Fragment() {
             }
     }
 
-    private fun postNotification(type: String) {
-        auth.currentUser?.getIdToken(true)
-            ?.addOnCompleteListener { task ->
-                val tokenResult: GetTokenResult? = task.result
-                val token = tokenResult?.token
-
-                if (token != null) {
-                    val interceptor = AuthInterceptor(token)
-                    val httpClient = OkHttpClient.Builder()
-                    httpClient.addInterceptor(interceptor)
-
-                    val retrofit = Retrofit.Builder()
-                        .baseUrl("https://admittedly-factual-tuna.ngrok-free.app/api/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .client(httpClient.build())
-                        .build()
-
-                    val api = retrofit.create(ApiService::class.java)
-                    val dataNotification = NotificationRequest(type)
-                    val call: Call<NotificationRequest?>? = api.notification(dataNotification)
-
-                    call!!.enqueue(object : Callback<NotificationRequest?> {
-                        override fun onResponse(
-                            call: Call<NotificationRequest?>,
-                            response: Response<NotificationRequest?>
-                        ) {
-                            if (response.isSuccessful) {
-                                val response: NotificationRequest? = response.body()
-                                Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show()
-                                Log.d("NOTIFICATION", "Berhasul coi ${token} tipenya: ${type}")
-                            } else {
-                                Log.d("NOTIFICATION", "Gagal tipenya: ${type}")
-                            }
-                        }
-
-                        override fun onFailure(call: Call<NotificationRequest?>, t: Throwable) {
-                            Toast.makeText(context, "Gagal", Toast.LENGTH_SHORT).show()
-                        }
-                    })
-
-                    Toast.makeText(context, "token adalah ${token}", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-}
-
-class AuthInterceptor(private val authToken: String) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        val originalRequest: Request = chain.request()
-
-        val requestWithAuth = originalRequest.newBuilder()
-            .header("Authroziation", "Bearer $authToken")
-            .build()
-
-        return chain.proceed(requestWithAuth)
     }
 }
