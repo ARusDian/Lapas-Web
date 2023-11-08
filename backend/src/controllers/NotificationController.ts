@@ -50,6 +50,7 @@ export const PostNotification = async (req: Request, res: Response, next: NextFu
                 PushButtonLog
             )
         );
+        return res.status(response.code).json(response);
     }
     catch (error) {
         next(error);
