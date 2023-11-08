@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.messaging.FirebaseMessaging
 import com.lapasstalkuda.panicbutton.MainActivity
 import com.lapasstalkuda.panicbutton.api.ApiService
@@ -62,7 +63,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener {
-//            postToken(deviceToken)
             val email = binding.inputUsername.text.toString()
             val password = binding.inputPassword.text.toString()
             signIn(email, password)
@@ -80,6 +80,7 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user = auth.currentUser
                     Toast.makeText(this, "Sign-in berhasil sebagai ${user?.email}", Toast.LENGTH_SHORT).show()
+//                    postToken(deviceToken)
 
                     val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
@@ -91,25 +92,46 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    private fun postToken(token: String) {
+    private fun postToken(deviceToken: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://admittedly-factual-tuna.ngrok-free.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         val api = retrofit.create(ApiService::class.java)
-        val dataToken = TokenRequest(token)
-        val call: Call<TokenRequest?>? = api.sendToken(dataToken)
-        call!!.enqueue(object : Callback<TokenRequest?> {
-            override fun onResponse(call: Call<TokenRequest?>?, response: Response<TokenRequest?>) {
-                val response: TokenRequest? = response.body()
-                Log.d("Login", "Berhasil coi ${response} tokennya: ${token}")
-            }
+        val dataToken = TokenRequest(deviceToken)
 
-            override fun onFailure(call: Call<TokenRequest?>, t: Throwable) {
-                TODO("Not yet implemented")
-            }
+        auth.currentUser?.getIdToken(true)
+            ?.addOnCompleteListener { task ->
+                val tokenResult: GetTokenResult? = task.result
+                val token = tokenResult?.token
+                Log.d("DEVICE TOKEN", "${deviceToken}")
 
-        })
+                if (token != null) {
+                    val call: Call<TokenRequest?>? = api.sendToken(dataToken)
+                    val authorizationHeader = "Bearer $token"
+                    Log.d("AUTH HEADER", "$authorizationHeader")
+
+                    call?.request()?.newBuilder()
+                        ?.addHeader("Authorization", authorizationHeader)
+                        ?.build()
+
+                    call!!.enqueue(object : Callback<TokenRequest?> {
+                        override fun onResponse(call: Call<TokenRequest?>?, response: Response<TokenRequest?>) {
+                            if (response.isSuccessful) {
+//                                val response: TokenRequest? = response.body()
+                                Log.d("TOKEN", "Berhasil kirim tokennya: ${deviceToken}")
+                            } else {
+                                Log.d("TOKEN", "Gagal kirim tokennya ${response}")
+                            }
+                        }
+
+                        override fun onFailure(call: Call<TokenRequest?>, t: Throwable) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+                }
+            }
     }
 }
