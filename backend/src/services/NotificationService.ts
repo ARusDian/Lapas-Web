@@ -118,7 +118,9 @@ export const getDeviceTokensService = async () => {
 }
 
 export const postNotificationService = async (req: UserAuthInfoRequest) => {
-    const { type, userId } = req.body;
+    const { type } = req.body;
+
+    const userId = req.userId;
 
     if (!type) {
         throw new ErrorResponse(
