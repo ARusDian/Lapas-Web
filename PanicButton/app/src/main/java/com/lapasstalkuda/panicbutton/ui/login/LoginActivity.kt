@@ -13,7 +13,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.lapasstalkuda.panicbutton.MainActivity
 import com.lapasstalkuda.panicbutton.api.ApiService
 import com.lapasstalkuda.panicbutton.api.TokenRequest
-import com.lapasstalkuda.panicbutton.api.TokenResponse
 import com.lapasstalkuda.panicbutton.databinding.ActivityLoginBinding
 import com.lapasstalkuda.panicbutton.ui.register.RegisterActivity
 import retrofit2.Call
@@ -86,6 +85,7 @@ class LoginActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
+                    Log.d("Login", "${task.exception?.message}")
                     Toast.makeText(this, "${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }

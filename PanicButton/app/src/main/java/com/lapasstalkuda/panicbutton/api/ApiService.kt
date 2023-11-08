@@ -1,8 +1,6 @@
 package com.lapasstalkuda.panicbutton.api
 
-import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -18,7 +16,7 @@ interface ApiService {
         @Body notification: NotificationRequest?,
     ): Call<NotificationRequest?>?
 
-    @POST("auth/register")
+    @POST("register")
     fun register(
         @Body register: RegisterRequest?,
     ): Call<RegisterRequest?>?
