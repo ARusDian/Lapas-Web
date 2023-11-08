@@ -11,6 +11,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.messaging.FirebaseMessaging
@@ -18,7 +19,6 @@ import com.lapasstalkuda.panicbutton.api.ApiService
 import com.lapasstalkuda.panicbutton.api.NotificationRequest
 import com.lapasstalkuda.panicbutton.api.TokenRequest
 import com.lapasstalkuda.panicbutton.databinding.FragmentHomeBinding
-import kotlinx.coroutines.tasks.await
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -149,6 +149,7 @@ class HomeFragment : Fragment() {
                             response: Response<NotificationRequest?>
                         ) {
                             if (response.isSuccessful) {
+                                val response: NotificationRequest? = response.body()
                                 Toast.makeText(context, "Berhasil", Toast.LENGTH_SHORT).show()
                                 Log.d("NOTIFICATION", "Berhasul coi ${token} tipenya: ${type}")
                             } else {
@@ -173,10 +174,7 @@ class HomeFragment : Fragment() {
 }
 
 class AuthInterceptor(private val authToken: String) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val user = FirebaseAuth.getInstance().currentUser
-        val token = user?.getIdToken(true).await().token
-
+    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         val originalRequest: Request = chain.request()
 
         val requestWithAuth = originalRequest.newBuilder()
