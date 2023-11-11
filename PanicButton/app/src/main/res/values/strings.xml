@@ -3,4 +3,14 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="text_masuk">Masuk</string>
+    <string name="text_daftar_akun">Daftar Akun</string>
+    <string name="text_email">Email</string>
+    <string name="subtext_name">Masukkan nama Anda</string>
+    <string name="subtext_email">Masukkan email Anda</string>
+    <string name="subtext_password">Masukkan password</string>
+    <string name="logo_perusahaan">Logo Perusahaan</string>
+    <string name="text_password">Password</string>
+    <string name="subtext_masuk">Masuk untuk menggunakan aplikasi</string>
+    <string name="subtext_register">Masukkan informasi untuk membuat akun</string>
 </resources>

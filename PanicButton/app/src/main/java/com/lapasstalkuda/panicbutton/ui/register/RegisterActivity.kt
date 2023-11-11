@@ -2,6 +2,7 @@ package com.lapasstalkuda.panicbutton.ui.register
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -33,13 +34,31 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.inputEmail.text.toString()
             val password = binding.inputPassword.text.toString()
             val confirmPassword = binding.inputConfirmPassword.text.toString()
-            register(name, email, password, confirmPassword)
+
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(this@RegisterActivity, "Field tidak boleh ada yang kosong", Toast.LENGTH_SHORT).show()
+            } else if (password != confirmPassword) {
+                Toast.makeText(this@RegisterActivity, "Konfirmasi password tidak sama dengan password", Toast.LENGTH_SHORT).show()
+            } else if (password.length < 8 || confirmPassword.length < 8) {
+                Toast.makeText(this@RegisterActivity, "Password minimal 8 karakter", Toast.LENGTH_SHORT).show()
+            } else if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
+                if (!isValidEmail(binding.inputEmail.text.toString()) && email.isNotEmpty()) {
+                    Toast.makeText(applicationContext, "Format email tidak valid", Toast.LENGTH_SHORT).show()
+                } else {
+                    register(name, email, password, confirmPassword)
+                }
+            }
         }
 
         binding.btnLogin.setOnClickListener {
             val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
             startActivity(intent)
+            finishAffinity()
         }
+    }
+
+    private fun isValidEmail(text: CharSequence): Boolean {
+        return !TextUtils.isEmpty(text) && android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()
     }
 
     private fun register(name: String, email: String, password: String, confirmPassword: String) {

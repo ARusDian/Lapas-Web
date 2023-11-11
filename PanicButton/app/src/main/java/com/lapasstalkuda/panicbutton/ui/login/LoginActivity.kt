@@ -4,10 +4,12 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GetTokenResult
 import com.google.firebase.messaging.FirebaseMessaging
@@ -53,13 +55,32 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             val email = binding.inputUsername.text.toString()
             val password = binding.inputPassword.text.toString()
-            signIn(email, password)
+
+            if (email.isEmpty() && password.isEmpty()) {
+                Toast.makeText(this@LoginActivity, "Email dan Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            } else if (email.isEmpty()) {
+                Toast.makeText(this@LoginActivity, "Email tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            } else if (password.isEmpty()) {
+                Toast.makeText(this@LoginActivity, "Password tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            } else if (password.length < 8) {
+                Toast.makeText(this@LoginActivity, "Password minimal 8 karakter", Toast.LENGTH_SHORT).show()
+            } else if (email.isNotEmpty() && password.isNotEmpty()) {
+                if (!isValidEmail(binding.inputUsername.text.toString()) && email.isNotEmpty()) {
+                    Toast.makeText(applicationContext, "Format email tidak valid", Toast.LENGTH_SHORT).show()
+                } else {
+                    signIn(email, password)
+                }
+            }
         }
 
         binding.btnRegister.setOnClickListener {
             val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    private fun isValidEmail(text: CharSequence): Boolean {
+        return !TextUtils.isEmpty(text) && android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()
     }
 
     private fun signIn(email: String, password: String) {
