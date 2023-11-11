@@ -13,4 +13,5 @@
     <string name="text_password">Password</string>
     <string name="subtext_masuk">Masuk untuk menggunakan aplikasi</string>
     <string name="subtext_register">Masukkan informasi untuk membuat akun</string>
+    <string name="text_kebakaran">KEBAKARAN</string>
 </resources>

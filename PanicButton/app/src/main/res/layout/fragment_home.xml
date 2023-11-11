@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/lapas_logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="24dp"
-        android:src="@drawable/lapas_logo"
+        android:src="@drawable/lapas_logo_rounded"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,7 +19,7 @@
     <ImageButton
         android:id="@+id/btn_kebakaran"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -34,39 +34,74 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lapas_logo" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/text_kebakaran"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/btn_kebakaran"
+        app:layout_constraintStart_toStartOf="@+id/btn_kebakaran"
+        app:layout_constraintTop_toBottomOf="@+id/btn_kebakaran" />
+
     <ImageButton
         android:id="@+id/btn_kerusuhan"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/primary_blue"
+        android:foreground="?android:attr/selectableItemBackground"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:scaleType="fitCenter"
         android:src="@drawable/kerusuhan_white_small"
-        android:background="@drawable/rounded_corner"
-        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_kebakaran" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="KERUSUHAN"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/btn_kerusuhan"
+        app:layout_constraintStart_toStartOf="@+id/btn_kerusuhan"
+        app:layout_constraintTop_toBottomOf="@+id/btn_kerusuhan" />
 
     <ImageButton
         android:id="@+id/btn_bencana"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_corner"
         android:backgroundTint="@color/primary_blue"
+        android:foreground="?android:attr/selectableItemBackground"
         android:paddingTop="16dp"
         android:paddingBottom="16dp"
         android:scaleType="fitCenter"
         android:src="@drawable/bencana_white_small"
-        android:background="@drawable/rounded_corner"
-        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_kerusuhan" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="BENCANA"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/btn_bencana"
+        app:layout_constraintStart_toStartOf="@+id/btn_bencana"
+        app:layout_constraintTop_toBottomOf="@+id/btn_bencana" />
 </androidx.constraintlayout.widget.ConstraintLayout>
