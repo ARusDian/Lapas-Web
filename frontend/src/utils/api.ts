@@ -30,6 +30,7 @@ const login = async (data: LoginProps) => {
     const response: UserCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
     localStorage.setItem("accessToken", response.user.accessToken);
     localStorage.setItem("refreshToken", response.user.refreshToken);
+    api.defaults.headers.common["Authorization"] = `Bearer ${response.user.accessToken}`;
     return response;
   } catch (error) {
     throw error;

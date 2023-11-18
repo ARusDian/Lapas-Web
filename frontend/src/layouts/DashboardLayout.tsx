@@ -4,7 +4,6 @@ import LinkHighlightContext from "../contexts/LinkHighlightContext";
 import AuthContext from "../contexts/AuthContext";
 import { BaseUserModel } from "../types/Auth.type";
 import { getAuthData } from "../utils/api";
-import { HelmetProvider } from "react-helmet-async";
 import Sidebar from "../pages/dashboard/components/Sidebar";
 import Navbar from "../pages/dashboard/components/Navbar";
 
@@ -42,7 +41,7 @@ const DashboardLayout = () => {
   }, []);
 
   return (
-    <HelmetProvider>
+    <>
       <Sidebar currentPath={currentPath} />
       <Navbar user={user} handleLogout={handleLogout} />
 
@@ -57,7 +56,7 @@ const DashboardLayout = () => {
           </div>
         </LinkHighlightContext.Provider>
       </AuthContext.Provider>
-    </HelmetProvider>
+    </>
   );
 };
 

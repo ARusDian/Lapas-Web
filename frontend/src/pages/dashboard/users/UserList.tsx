@@ -20,6 +20,7 @@ const UserList = () => {
   const [users, setUsers] = React.useState<UserModel[]>([]);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const location = useLocation();
+  console.log(users);
 
   const fetchUsers = () => {
     getUsers()

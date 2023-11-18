@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { LoginProps } from "../../types/Auth.type";
 import { Button, TextField } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Helmet } from "react-helmet-async";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login } from "../../utils/api";
 
@@ -40,7 +40,7 @@ const Login = () => {
   }, [])
 
   return (
-    <HelmetProvider>
+    <>
       <Helmet>
         <title>Login - LapasPanic</title>
       </Helmet>
@@ -100,7 +100,7 @@ const Login = () => {
           </form>
         </div>
       </div>
-    </HelmetProvider>
+    </>
   );
 };
 

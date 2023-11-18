@@ -35,6 +35,10 @@ interface UserModel extends BaseUserModel{
   roleId?: number
 }
 
+interface UserWithDeviceToken extends UserModel {
+  deviceToken: string
+}
+
 interface Role {
   id: number,
   name: string,

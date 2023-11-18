@@ -7,6 +7,7 @@ import LogIndex from "./pages/dashboard/logs/LogIndex";
 import DashboardIndex from "./pages/dashboard/DashboardIndex";
 import UserEdit from "./pages/dashboard/users/UserEdit";
 import NotFound from "./pages/NotFound";
+import { HelmetProvider } from "react-helmet-async";
 
 const router = createBrowserRouter([
   {
@@ -52,9 +53,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <>
+    <HelmetProvider>
       <RouterProvider router={router} />
-    </>
+    </HelmetProvider>
   );
 }
 
